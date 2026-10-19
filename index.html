@@ -100,7 +100,10 @@
 
         <!-- TAB WORKOUT: ENTRENAMIENTO Y VÍDEOS -->
         <div id="tab-workout" class="tab-content space-y-4">
-            <h2 class="text-lg font-bold text-white">Plan de Fuerza (Fase 1)</h2>
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-bold text-white">Plan de Fuerza (Fase 1)</h2>
+                <button onclick="switchTab('home')" class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-left mr-1"></i> Volver</button>
+            </div>
             
             <div class="bg-slate-800 border border-rose-500/40 rounded-2xl p-4 space-y-3 shadow-lg">
                 <div class="flex justify-between items-center border-b border-slate-700 pb-2">
@@ -205,4 +208,362 @@
                         <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
                             <div class="font-bold text-emerald-400 mb-1 flex justify-between">
                                 <span>Viernes (1.540 kcal)</span>
-                                <span class="text-slate
+                                <span class="text-slate-400">P: 102g | C: 155g | G: 52g</span>
+                            </div>
+                            <p class="text-slate-300"><strong>Desayuno (420 kcal):</strong> 100g Café/infusión, 70g Pan de espelta, 15g AOVE, 80g Jamón de pavo.</p>
+                            <p class="text-slate-300 mt-1"><strong>Comida (610 kcal):</strong> 120g Salmón a la plancha, 100g Patata asada, 100g Brócoli al vapor.</p>
+                            <p class="text-slate-300 mt-1"><strong>Snack (130 kcal):</strong> 1 Manzana + 15g Almendras al natural.</p>
+                            <p class="text-slate-300 mt-1"><strong>Cena (380 kcal):</strong> Ensalada templada con 100g Pollo a la plancha, 80g Canónigos, 50g Queso fresco 0% y aliño con AOVE.</p>
+                        </div>
+
+                        <!-- SÁBADO -->
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
+                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
+                                <span>Sábado (1.680 kcal)</span>
+                                <span class="text-slate-400">P: 110g | C: 170g | G: 58g</span>
+                            </div>
+                            <p class="text-slate-300"><strong>Desayuno (510 kcal):</strong> 100g Café/infusión, Tortitas de avena (40g avena + 3 claras), 15g Mantequilla de cacahuete.</p>
+                            <p class="text-slate-300 mt-1"><strong>Comida (650 kcal):</strong> Wok de Ternera (120g Ternera limpia, 100g Fideos de arroz, verduras variadas salteadas).</p>
+                            <p class="text-slate-300 mt-1"><strong>Snack (120 kcal):</strong> 1 Yogur proteico + 100g Frutos rojos.</p>
+                            <p class="text-slate-300 mt-1"><strong>Cena (400 kcal):</strong> Hamburguesa de pollo casera (120g) al plato con patata dulce (batata) al horno y ensalada.</p>
+                        </div>
+
+                        <!-- DOMINGO -->
+                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
+                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
+                                <span>Domingo (1.450 kcal)</span>
+                                <span class="text-slate-400">P: 95g | C: 140g | G: 48g</span>
+                            </div>
+                            <p class="text-slate-300"><strong>Desayuno (400 kcal):</strong> 100g Café/infusión, 70g Pan integral, 1/2 Aguacate, 50g Pavo.</p>
+                            <p class="text-slate-300 mt-1"><strong>Comida (580 kcal):</strong> Paella/Arroz marinero fit (100g Arroz, 100g Calamar/Sepia, 80g Gambas, verduras).</p>
+                            <p class="text-slate-300 mt-1"><strong>Snack (100 kcal):</strong> Gelatina proteica + Infusión digestiva.</p>
+                            <p class="text-slate-300 mt-1"><strong>Cena (370 kcal):</strong> Revoltorio de 2 huevos con espárragos trigueros y gulas, acompañado de ensalada de tomate.</p>
+                        </div>
+                    </div>
+
+                    <!-- LISTA DE LA COMPRA FASE 1 -->
+                    <div class="mt-4 pt-3 border-t border-slate-700">
+                        <button onclick="toggleShoppingList('shop-fase1')" class="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-xl p-2.5 font-bold text-xs flex justify-between items-center transition-colors">
+                            <span><i class="fa-solid fa-cart-shopping mr-2"></i> Lista de la Compra Semanal (Fase 1)</span>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        
+                        <div id="shop-fase1" class="hidden mt-3 p-3 bg-slate-900/80 rounded-xl border border-slate-700 text-xs space-y-3">
+                            <div>
+                                <h4 class="font-bold text-emerald-400 mb-1"><i class="fa-solid fa-drumstick-bite mr-1"></i> Carnes, Pescados y Huevos</h4>
+                                <ul class="list-disc list-inside text-slate-300 space-y-0.5">
+                                    <li>Filete y tiras de Ternera limpia</li>
+                                    <li>Pechugas y Hamburguesas caseras de Pollo/Pavo</li>
+                                    <li>Lomo embuchado, Jamón serrano y Lacón</li>
+                                    <li>Lomos de Merluza y Filete de Salmón</li>
+                                    <li>Atún natural, Calamar/Sepia y Gambas</li>
+                                    <li>Huevos frescos y claras líquidas</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-emerald-400 mb-1"><i class="fa-solid fa-wheat-awn mr-1"></i> Hidratos y Panadería</h4>
+                                <ul class="list-disc list-inside text-slate-300 space-y-0.5">
+                                    <li>Pan de centeno, espelta e integral Thin</li>
+                                    <li>Avena en copos o harina</li>
+                                    <li>Arroz (blanco, integral, fideos de arroz)</li>
+                                    <li>Cous-cous y Quinoa</li>
+                                    <li>Patatas cocidas/asadas y Batata</li>
+                                    <li>Garbanzos cocidos en tarro</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-emerald-400 mb-1"><i class="fa-solid fa-apple-whole mr-1"></i> Frutas y Verduras</h4>
+                                <ul class="list-disc list-inside text-slate-300 space-y-0.5">
+                                    <li>Piña, Mandarinas, Manzanas, Melocotones, Frutos rojos</li>
+                                    <li>Espinacas, Canónigos, Brócoli, Espárragos trigueros</li>
+                                    <li>Pimientos (rojos y verdes), Calabacín, Zanahorias</li>
+                                    <li>Cebollas, Ajo, Champiñones, Tomates, Aguacate</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-emerald-400 mb-1"><i class="fa-solid fa-bottle-droplet mr-1"></i> Lácteos, Grasas y Despensa</h4>
+                                <ul class="list-disc list-inside text-slate-300 space-y-0.5">
+                                    <li>Aceite de oliva virgen extra (AOVE)</li>
+                                    <li>Yogur proteico y Gelatina proteica</li>
+                                    <li>Queso fresco 0% y Leche de coco en lata</li>
+                                    <li>Frutos secos (almendras, nueces) y Mantequilla de cacahuete</li>
+                                    <li>Café, infusiones y especias al gusto</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fases 2, 3 y 4 -->
+                <div id="lockedFases">
+                    <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 space-y-2 opacity-60 mb-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-amber-400 uppercase">Fase 2 — Intensificación</span>
+                            <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded"><i class="fa-solid fa-lock"></i> Bloqueado</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Requiere validación de pago de la fase correspondiente.</p>
+                    </div>
+
+                    <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 space-y-2 opacity-60 mb-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-amber-400 uppercase">Fase 3 — Pico y Rendimiento</span>
+                            <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded"><i class="fa-solid fa-lock"></i> Bloqueado</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Requiere validación de pago de la fase correspondiente.</p>
+                    </div>
+
+                    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-purple-400 uppercase">Fase 4 — Consolidación & Peak</span>
+                            <span class="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded">Avanzado</span>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Nutrición de Mantenimiento Estructural y Supercompensación</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Fase diseñada para fijar los logros de composición corporal (mantenimiento de masa muscular y mínima expresión de grasa). Ajuste de carbohidratos complejos peri-entreno y protocolo de supercompensación de glucógeno para carreras de larga distancia o picos de fuerza máxima.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 3: HISTORIAL -->
+        <div id="tab-history" class="tab-content space-y-4">
+            <h2 class="text-lg font-bold text-white">Historial de Registros</h2>
+            <div id="historyList" class="space-y-3">
+                <!-- Inyectado dinámicamente -->
+            </div>
+        </div>
+
+        <!-- TAB 4: EVOLUCIÓN (GRÁFICA) -->
+        <div id="tab-evolution" class="tab-content space-y-4">
+            <h2 class="text-lg font-bold text-white">Evolución Gráfica</h2>
+            <div class="bg-slate-800 rounded-2xl p-4 border border-slate-700 shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Métrica</span>
+                    <select id="metricSelector" onchange="updateChart()" class="bg-slate-900 text-emerald-400 font-medium text-sm rounded-lg p-2 border border-slate-700 focus:outline-none focus:border-emerald-500">
+                        <option value="peso">Peso (kg)</option>
+                        <option value="cintura">Cintura (cm)</option>
+                        <option value="pecho">Pecho (cm)</option>
+                        <option value="brazo">Brazo (cm)</option>
+                        <option value="muslo">Muslo (cm)</option>
+                        <option value="gemelo">Gemelo (cm)</option>
+                        <option value="grasa">% Grasa corporal</option>
+                        <option value="musculo">% Masa muscular</option>
+                    </select>
+                </div>
+                
+                <div class="relative h-64 w-full">
+                    <canvas id="progressChart"></canvas>
+                </div>
+
+                <!-- Time Filter -->
+                <div class="flex justify-around mt-4 pt-3 border-t border-slate-700 text-xs">
+                    <button onclick="setFilter('1M')" class="filter-btn text-slate-400 hover:text-emerald-400 font-medium py-1 px-2">1 Mes</button>
+                    <button onclick="setFilter('3M')" class="filter-btn text-slate-400 hover:text-emerald-400 font-medium py-1 px-2">3 Meses</button>
+                    <button onclick="setFilter('6M')" class="filter-btn text-slate-400 hover:text-emerald-400 font-medium py-1 px-2">6 Meses</button>
+                    <button onclick="setFilter('ALL')" class="filter-btn text-emerald-400 font-bold py-1 px-2 border-b-2 border-emerald-400">Todo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: AJUSTES -->
+        <div id="tab-settings" class="tab-content space-y-4">
+            <h2 class="text-lg font-bold text-white">Configuración y Pagos</h2>
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 space-y-3">
+                <div class="border-b border-slate-700 pb-3">
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Código de activación de Fase</label>
+                    <div class="flex gap-2">
+                        <input type="password" id="paymentCode" placeholder="Introduce PIN de pago" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white text-xs focus:outline-none focus:border-emerald-500">
+                        <button onclick="verifyPayment()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs px-4 rounded-lg">Validar</button>
+                    </div>
+                </div>
+
+                <button onclick="exportData()" class="w-full bg-slate-900 hover:bg-slate-700 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-between border border-slate-700 text-xs">
+                    <span><i class="fa-solid fa-download text-emerald-400 mr-2"></i> Exportar Copia (JSON)</span>
+                    <i class="fa-solid fa-chevron-right text-slate-500"></i>
+                </button>
+
+                <label class="w-full bg-slate-900 hover:bg-slate-700 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-between border border-slate-700 cursor-pointer block text-xs">
+                    <span><i class="fa-solid fa-upload text-emerald-400 mr-2"></i> Importar Copia (JSON)</span>
+                    <input type="file" accept=".json" onchange="importData(event)" class="hidden">
+                    <i class="fa-solid fa-chevron-right text-slate-500"></i>
+                </label>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Floating Action Button -->
+    <button onclick="openModal()" class="fixed bottom-20 right-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl transition-transform active:scale-95 z-20">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around p-3 z-20 text-xs">
+        <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center text-emerald-400 font-bold">
+            <i class="fa-solid fa-house text-lg mb-1"></i>
+            <span>Home</span>
+        </button>
+        <button onclick="switchTab('nutrition')" id="nav-nutrition" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
+            <i class="fa-solid fa-utensils text-lg mb-1"></i>
+            <span>Nutrición</span>
+        </button>
+        <button onclick="switchTab('history')" id="nav-history" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
+            <i class="fa-solid fa-calendar-days text-lg mb-1"></i>
+            <span>Historial</span>
+        </button>
+        <button onclick="switchTab('evolution')" id="nav-evolution" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
+            <i class="fa-solid fa-chart-line text-lg mb-1"></i>
+            <span>Evolución</span>
+        </button>
+        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
+            <i class="fa-solid fa-gear text-lg mb-1"></i>
+            <span>Ajustes</span>
+        </button>
+    </nav>
+
+    <!-- Add/Edit Entry Modal -->
+    <div id="entryModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center hidden z-50 p-0 sm:p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+                <h3 class="text-lg font-bold text-white" id="modalTitle">Nuevo Registro</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="recordForm" onsubmit="saveRecord(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Fecha</label>
+                    <input type="date" id="inputDate" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Peso (kg)</label>
+                        <input type="number" step="0.1" id="inputPeso" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Cintura (cm)</label>
+                        <input type="number" step="0.1" id="inputCintura" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Pecho (cm)</label>
+                        <input type="number" step="0.1" id="inputPecho" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Brazo (cm)</label>
+                        <input type="number" step="0.1" id="inputBrazo" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Muslo (cm)</label>
+                        <input type="number" step="0.1" id="inputMuslo" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Gemelo (cm)</label>
+                        <input type="number" step="0.1" id="inputGemelo" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">% Grasa</label>
+                        <input type="number" step="0.1" id="inputGrasa" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">% Músculo</label>
+                        <input type="number" step="0.1" id="inputMusculo" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-lg transition-colors">
+                        Guardar Registro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        let records = JSON.parse(localStorage.getItem('fitnessRecords')) || [];
+        let chartInstance = null;
+        let activeFilter = 'ALL';
+        let editingIndex = null;
+
+        document.getElementById('inputDate').valueAsDate = new Date();
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = 'nav-btn flex flex-col items-center text-slate-400 hover:text-white';
+            });
+            
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.className = 'nav-btn flex flex-col items-center text-emerald-400 font-bold';
+            }
+
+            if (tabId === 'evolution') {
+                updateChart();
+            }
+        }
+
+        function toggleShoppingList(listId) {
+            const listEl = document.getElementById(listId);
+            listEl.classList.toggle('hidden');
+        }
+
+        function verifyPayment() {
+            const code = document.getElementById('paymentCode').value;
+            if (code === 'VIP2026' || code === 'PAGOOK') {
+                localStorage.setItem('faseUnlocked', 'true');
+                alert('¡Pago verificado! Fases 2 y 3 desbloqueadas con éxito.');
+                location.reload();
+            } else {
+                alert('Código incorrecto. Contacta con el administrador.');
+            }
+        }
+
+        if (localStorage.getItem('faseUnlocked') === 'true') {
+            document.getElementById('lockedFases').innerHTML = `
+                <div class="bg-slate-800 border border-emerald-500/40 rounded-2xl p-4 space-y-2 mb-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-emerald-400 uppercase">Fase 2 — Intensificación</span>
+                        <span class="text-xs bg-emerald-500/25 text-emerald-300 px-2 py-0.5 rounded">Desbloqueado</span>
+                    </div>
+                    <p class="text-xs text-slate-300">Plan nutricional avanzado para fase de fuerza y alta intensidad muscular.</p>
+                </div>
+                <div class="bg-slate-800 border border-emerald-500/40 rounded-2xl p-4 space-y-2 mb-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-emerald-400 uppercase">Fase 3 — Pico y Rendimiento</span>
+                        <span class="text-xs bg-emerald-500/25 text-emerald-300 px-2 py-0.5 rounded">Desbloqueado</span>
+                    </div>
+                    <p class="text-xs text-slate-300">Nutrición de optimización de carbohidratos y carga de glucógeno pre-competición.</p>
+                </div>`;
+        }
+
+        function saveRecord(e) {
+            e.preventDefault();
+            
+            const newRecord = {
+                date: document.getElementById('inputDate').value,
+                peso: parseFloat(document.getElementById('inputPeso').value) || null,
+                cintura: parseFloat(document.getElementById('inputCintura').value) || null,
+                pecho: parseFloat(document.getElementById('inputPecho').value) || null,
+                brazo: parseFloat(document.getElementById('inputBrazo').value) || null,
+                muslo: parseFloat(document.getElementById('inputMuslo').value) || null,
+                gemelo: parseFloat(document.getElementById('inputGemelo').value) || null,
+                grasa: parseFloat(document.getElementById('inputGrasa').value) || null,
+                musculo: parseFloat(document.getElementById('inputMusculo').value) || null,
+            };
+
+            if (editingIndex !== null) {
+                records[editingIndex] = newRecord;
+                editingIndex = null;
+            } else {
+                records.push(newRecord);
+            }
+
+            records.sort((a, b) => new Date(a.date) - new
