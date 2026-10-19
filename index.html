@@ -1,332 +1,764 @@
+```html
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fuerza y Salud</title>
-    
-    <!-- Icono e integración PWA para pantalla de inicio -->
-    <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/isometric/192/activity.png">
-    <link rel="apple-touch-icon" href="https://img.icons8.com/isometric/180/activity.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fuerza y Salud | Harbiz Experience</title>
+
+    <!-- PWA & Favicons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="https://cdn-icons-png.flaticon.com/512/2964/2964514.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2964/2964514.png">
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Tailwind CSS -->
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        harbiz: {
+                            50: '#f0fdf4',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#6366f1'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .glow-emerald {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 99px; }
     </style>
 </head>
-<body class="pb-24">
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-24 flex flex-col justify-between select-none">
 
-    <!-- Header Superior -->
-    <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-10 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold">
-                <i class="fa-solid fa-user"></i>
+    <!-- HEADER HARBIZ PRO -->
+    <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-500 to-indigo-500 flex items-center justify-center font-bold text-white text-sm shadow-md">
+                        FS
+                    </div>
+                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-emerald-400">Cliente Activo</span>
+                    <h1 class="text-sm font-bold text-white flex items-center gap-1.5">
+                        Fuerza y Salud <i class="fa-solid fa-circle-check text-emerald-400 text-xs"></i>
+                    </h1>
+                </div>
             </div>
-            <div>
-                <p class="text-xs text-slate-400">Buenos días,</p>
-                <h2 id="headerUserName" class="text-sm font-bold text-white tracking-wide">USUARIO</h2>
+
+            <div class="flex items-center gap-2">
+                <button onclick="toggleTimerModal()" class="p-2 text-slate-300 hover:text-white rounded-xl bg-slate-800 border border-slate-700/60 active:scale-95 transition-transform">
+                    <i class="fa-solid fa-stopwatch text-emerald-400"></i>
+                </button>
+                <button onclick="switchTab('settings')" class="p-2 text-slate-300 hover:text-white rounded-xl bg-slate-800 border border-slate-700/60 active:scale-95 transition-transform">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
             </div>
-        </div>
-        <div class="flex items-center gap-2">
-            <button onclick="switchTab('settings')" class="text-slate-400 hover:text-white p-2">
-                <i class="fa-solid fa-gear text-lg"></i>
-            </button>
         </div>
     </header>
 
-    <!-- Contenido Principal -->
-    <main class="p-4 max-w-md mx-auto">
+    <!-- CONTENIDO PRINCIPAL DE PESTAÑAS -->
+    <main class="max-w-md mx-auto w-full p-4 flex-1">
 
-        <!-- TAB 1: INICIO / PLAN DE HOY -->
-        <div id="tab-home" class="tab-content active space-y-6">
-            <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-white">Plan de hoy</h1>
-                <button onclick="switchTab('history')" class="text-xs text-emerald-400 font-semibold">Ver historial</button>
+        <!-- TAB 1: PLAN DE HOY (HOME) -->
+        <div id="tab-home" class="tab-content active space-y-5">
+            <!-- Saludo y Estado -->
+            <div class="bg-gradient-to-r from-emerald-950/60 via-slate-900 to-slate-900 border border-emerald-500/30 p-4 rounded-2xl flex justify-between items-center shadow-lg">
+                <div>
+                    <p class="text-xs text-slate-400 font-medium">¡Bienvenido de nuevo!</p>
+                    <h2 class="text-lg font-extrabold text-white">Plan de Entrenamiento</h2>
+                    <p class="text-xs text-emerald-400 mt-0.5 flex items-center gap-1">
+                        <i class="fa-solid fa-fire"></i> Fase de Hipertrofia & Fuerza
+                    </p>
+                </div>
+                <div class="text-center bg-slate-950/60 px-3 py-2 rounded-xl border border-slate-800">
+                    <span class="block text-xs text-slate-400">Semana</span>
+                    <span class="text-lg font-black text-emerald-400">4 / 12</span>
+                </div>
             </div>
 
-            <!-- Tarjetas de Navegación -->
-            <div class="space-y-3 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-700">
-                
-                <!-- Estado Físico -->
-                <div class="relative pl-10">
-                    <div class="absolute left-2.5 top-3.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-4 ring-slate-900"></div>
-                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-md flex justify-between items-center">
-                        <div>
-                            <span class="text-xs font-semibold text-emerald-400 uppercase">Estado físico</span>
-                            <h3 class="font-bold text-white text-sm mt-0.5">Registro de métricas corporales</h3>
-                            <p class="text-xs text-slate-400 mt-1">Controla peso, grasa y medidas</p>
+            <!-- Tareas Diarias -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <i class="fa-solid fa-calendar-day text-emerald-400"></i> Tareas de hoy
+                </h3>
+
+                <!-- Tarea 1: Entrenar -->
+                <div onclick="switchTab('workout')" class="bg-slate-900 hover:bg-slate-800/80 border border-slate-800 p-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-lg group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-dumbbell"></i>
                         </div>
-                        <button onclick="openModal()" class="bg-emerald-500/20 text-emerald-400 p-2.5 rounded-xl hover:bg-emerald-500/30">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
+                        <div>
+                            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold uppercase">Sesión Asignada</span>
+                            <h4 class="text-sm font-bold text-white mt-1">Torso & Fuerza Principal</h4>
+                            <p class="text-xs text-slate-400">4 Ejercicios • 45 min aprox.</p>
+                        </div>
                     </div>
+                    <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-emerald-400 transition-colors"></i>
                 </div>
 
-                <!-- Actividad Diaria -->
-                <div class="relative pl-10">
-                    <div class="absolute left-2.5 top-3.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-rose-500 ring-4 ring-slate-900"></div>
-                    <div onclick="switchTab('workout')" class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-md flex justify-between items-center cursor-pointer hover:border-rose-500/50 transition-colors">
-                        <div>
-                            <span class="text-xs font-semibold text-rose-400 uppercase">Actividad diaria</span>
-                            <h3 class="font-bold text-white text-sm mt-0.5">Entrenamiento de Fuerza y Vídeos</h3>
-                            <p class="text-xs text-slate-400 mt-1">Acceso a rutinas y tutoriales de técnica</p>
+                <!-- Tarea 2: Nutrición -->
+                <div onclick="switchTab('nutrition')" class="bg-slate-900 hover:bg-slate-800/80 border border-slate-800 p-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center text-lg group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-utensils"></i>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-slate-500 text-sm"></i>
+                        <div>
+                            <span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold uppercase">Plan Nutricional</span>
+                            <h4 class="text-sm font-bold text-white mt-1">Pautas & Menú Diario</h4>
+                            <p class="text-xs text-slate-400">2.200 kcal • 160g Proteína</p>
+                        </div>
                     </div>
+                    <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-indigo-400 transition-colors"></i>
                 </div>
 
-                <!-- Nutrición -->
-                <div class="relative pl-10">
-                    <div class="absolute left-2.5 top-3.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-amber-500 ring-4 ring-slate-900"></div>
-                    <div onclick="switchTab('nutrition')" class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-md flex justify-between items-center cursor-pointer hover:border-amber-500/50 transition-colors">
-                        <div>
-                            <span class="text-xs font-semibold text-amber-400 uppercase">Nutrición & Fases</span>
-                            <h3 class="font-bold text-white text-sm mt-0.5">Planes y Listas de la Compra</h3>
-                            <p class="text-xs text-slate-400 mt-1">Consulta menús y lista de ingredientes</p>
+                <!-- Tarea 3: Registrar Métricas -->
+                <div onclick="openFormModal()" class="bg-slate-900 hover:bg-slate-800/80 border border-slate-800 p-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between group">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-lg group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-weight-scale"></i>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-slate-500 text-sm"></i>
+                        <div>
+                            <span class="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-bold uppercase">Seguimiento</span>
+                            <h4 class="text-sm font-bold text-white mt-1">Añadir Peso / Medidas</h4>
+                            <p class="text-xs text-slate-400">Mantén al día tu evolución</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-plus text-slate-500 group-hover:text-amber-400 transition-colors"></i>
+                </div>
+            </div>
+
+            <!-- Resumen Rápido Métricas -->
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl">
+                    <span class="text-xs text-slate-400 font-medium">Último Peso</span>
+                    <div class="mt-1 flex items-baseline gap-1">
+                        <span id="homeStatWeight" class="text-xl font-black text-white">--</span>
+                        <span class="text-xs text-slate-400">kg</span>
                     </div>
                 </div>
-
+                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl">
+                    <span class="text-xs text-slate-400 font-medium">Cintura</span>
+                    <div class="mt-1 flex items-baseline gap-1">
+                        <span id="homeStatWaist" class="text-xl font-black text-white">--</span>
+                        <span class="text-xs text-slate-400">cm</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- TAB ENTRENAMIENTO Y VÍDEOS -->
+        <!-- TAB 2: ENTRENAMIENTO / RUTINAS -->
         <div id="tab-workout" class="tab-content space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-bold text-white">Plan de Fuerza (Fase 1)</h2>
-                <button onclick="switchTab('home')" class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-left mr-1"></i> Volver</button>
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-dumbbell text-emerald-400"></i> Rutina de Entrenamiento
+                </h2>
+                <button onclick="toggleTimerModal()" class="text-xs bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-2.5 py-1 rounded-lg font-semibold">
+                    <i class="fa-solid fa-stopwatch mr-1"></i> Cronómetro
+                </button>
             </div>
-            
-            <div class="bg-slate-800 border border-rose-500/40 rounded-2xl p-4 space-y-3 shadow-lg">
-                <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-                    <span class="text-xs font-bold text-rose-400 uppercase">Rutina A — Fuerza General</span>
-                    <span class="text-xs bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded font-medium">Fase Activa</span>
+
+            <!-- Tarjeta de Ejercicio 1 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-[10px] text-emerald-400 font-bold uppercase bg-emerald-500/10 px-2 py-0.5 rounded">Ejercicio 1</span>
+                        <h3 class="text-sm font-bold text-white mt-1">Press de Banca Plano con Barra</h3>
+                    </div>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded-lg font-mono">4 x 8-10</span>
                 </div>
-                <p class="text-xs text-slate-300">
-                    Entrenamiento estructurado con barra, mancuernas, banco de pesas y gomas elásticas. Pulsa sobre cualquier ejercicio para ver su vídeo explicativo de técnica:
-                </p>
-
-                <div class="space-y-2 text-xs pt-1">
-                    <a href="https://www.youtube.com/results?search_query=ejecucion+sentadilla+con+barra" target="_blank" class="block bg-slate-900/80 hover:bg-slate-900 p-3 rounded-xl border border-slate-700/60 flex justify-between items-center transition-colors">
-                        <span class="font-bold text-white"><i class="fa-solid fa-dumbbell text-rose-400 mr-2"></i> Sentadilla con barra / Mancuernas</span>
-                        <span class="text-rose-400 text-xs flex items-center gap-1">Ver vídeo <i class="fa-solid fa-play text-[10px]"></i></span>
-                    </a>
-
-                    <a href="https://www.youtube.com/results?search_query=ejecucion+press+de+banca+con+barra" target="_blank" class="block bg-slate-900/80 hover:bg-slate-900 p-3 rounded-xl border border-slate-700/60 flex justify-between items-center transition-colors">
-                        <span class="font-bold text-white"><i class="fa-solid fa-dumbbell text-rose-400 mr-2"></i> Press de banca en banco de pesas</span>
-                        <span class="text-rose-400 text-xs flex items-center gap-1">Ver vídeo <i class="fa-solid fa-play text-[10px]"></i></span>
-                    </a>
-
-                    <a href="https://www.youtube.com/results?search_query=ejecucion+peso+muerto+con+barra" target="_blank" class="block bg-slate-900/80 hover:bg-slate-900 p-3 rounded-xl border border-slate-700/60 flex justify-between items-center transition-colors">
-                        <span class="font-bold text-white"><i class="fa-solid fa-dumbbell text-rose-400 mr-2"></i> Peso muerto rumano</span>
-                        <span class="text-rose-400 text-xs flex items-center gap-1">Ver vídeo <i class="fa-solid fa-play text-[10px]"></i></span>
-                    </a>
-
-                    <a href="https://www.youtube.com/results?search_query=ejecucion+remo+con+mancuerna" target="_blank" class="block bg-slate-900/80 hover:bg-slate-900 p-3 rounded-xl border border-slate-700/60 flex justify-between items-center transition-colors">
-                        <span class="font-bold text-white"><i class="fa-solid fa-dumbbell text-rose-400 mr-2"></i> Remo con mancuerna / barra</span>
-                        <span class="text-rose-400 text-xs flex items-center gap-1">Ver vídeo <i class="fa-solid fa-play text-[10px]"></i></span>
-                    </a>
-
-                    <a href="https://www.youtube.com/results?search_query=ejercicios+con+gomas+elasticas+musculacion" target="_blank" class="block bg-slate-900/80 hover:bg-slate-900 p-3 rounded-xl border border-slate-700/60 flex justify-between items-center transition-colors">
-                        <span class="font-bold text-white"><i class="fa-solid fa-dumbbell text-rose-400 mr-2"></i> Ejercicios con bandas / gomas elásticas</span>
-                        <span class="text-rose-400 text-xs flex items-center gap-1">Ver vídeo <i class="fa-solid fa-play text-[10px]"></i></span>
-                    </a>
+                <p class="text-xs text-slate-400">Descanso: 90 segundos • Foco en fase excéntrica controlada.</p>
+                <div class="grid grid-cols-4 gap-2 text-center text-xs font-mono pt-1">
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] text-slate-500">Serie 1</span>80 kg</div>
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] text-slate-500">Serie 2</span>80 kg</div>
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] text-slate-500">Serie 3</span>82.5 kg</div>
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] text-slate-500">Serie 4</span>82.5 kg</div>
                 </div>
+            </div>
+
+            <!-- Tarjeta de Ejercicio 2 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-[10px] text-emerald-400 font-bold uppercase bg-emerald-500/10 px-2 py-0.5 rounded">Ejercicio 2</span>
+                        <h3 class="text-sm font-bold text-white mt-1">Dominadas Pronadas / Jalón</h3>
+                    </div>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded-lg font-mono">4 x 10</span>
+                </div>
+                <p class="text-xs text-slate-400">Descanso: 75 segundos • Máxima retracción escapular.</p>
+                <div class="grid grid-cols-4 gap-2 text-center text-xs font-mono pt-1">
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] text-slate-500">Serie 1</span>Corporal</div>
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] text-slate-500">Serie 2</span>Corporal</div>
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] text-slate-500">Serie 3</span>+5 kg</div>
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] text-slate-500">Serie 4</span>+5 kg</div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Ejercicio 3 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-[10px] text-emerald-400 font-bold uppercase bg-emerald-500/10 px-2 py-0.5 rounded">Ejercicio 3</span>
+                        <h3 class="text-sm font-bold text-white mt-1">Press Militar con Mancuernas</h3>
+                    </div>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded-lg font-mono">3 x 12</span>
+                </div>
+                <p class="text-xs text-slate-400">Descanso: 60 segundos.</p>
             </div>
         </div>
 
-        <!-- TAB NUTRICIÓN Y FASES -->
+        <!-- TAB 3: NUTRICIÓN & COMPRA -->
         <div id="tab-nutrition" class="tab-content space-y-4">
-            <h2 class="text-lg font-bold text-white">Nutrición por Fase (F90)</h2>
-            
-            <div class="space-y-4">
-                <div class="bg-slate-800 border border-emerald-500/40 rounded-2xl p-4 space-y-3 shadow-lg">
-                    <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-                        <span class="text-xs font-bold text-emerald-400 uppercase">Fase 1 — Programa F90</span>
-                        <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-medium">Desbloqueado</span>
-                    </div>
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-utensils text-indigo-400"></i> Plan de Nutrición
+                </h2>
+                <span class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-full font-semibold">2.200 Kcal</span>
+            </div>
 
-                    <div class="space-y-3 text-xs text-slate-300">
-                        <!-- Menús semanales -->
-                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
-                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
-                                <span>Lunes (1.226 kcal)</span>
-                                <span class="text-slate-400">P: 79g | C: 162g | G: 29g</span>
-                            </div>
-                            <p class="text-slate-300"><strong>Desayuno:</strong> Café/infusión, 70g Pan centeno, 15g AOVE, 20g Jamón serrano.</p>
-                            <p class="text-slate-300 mt-1"><strong>Comida:</strong> 100g Ternera, 100g Arroz, 100g Piña.</p>
-                            <p class="text-slate-300 mt-1"><strong>Cena:</strong> Aliño con patata cocida, atún natural, cebolla y pimiento.</p>
-                        </div>
-                    </div>
+            <!-- Macros -->
+            <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl">
+                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Proteínas</span>
+                    <span class="text-sm font-bold text-emerald-400">160g</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl">
+                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Carbos</span>
+                    <span class="text-sm font-bold text-amber-400">220g</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl">
+                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Grasas</span>
+                    <span class="text-sm font-bold text-indigo-400">65g</span>
+                </div>
+            </div>
 
-                    <div class="mt-4 pt-3 border-t border-slate-700">
-                        <button onclick="toggleShoppingList('shop-fase1')" class="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-xl p-2.5 font-bold text-xs flex justify-between items-center transition-colors">
-                            <span><i class="fa-solid fa-cart-shopping mr-2"></i> Lista de la Compra Semanal (Fase 1)</span>
-                            <i class="fa-solid fa-chevron-down text-xs"></i>
-                        </button>
-                        
-                        <div id="shop-fase1" class="hidden mt-3 p-3 bg-slate-900/80 rounded-xl border border-slate-700 text-xs space-y-3">
-                            <p class="text-slate-300">Consulta ingredientes esenciales en la carnicería, pescadería y frutería.</p>
-                        </div>
-                    </div>
+            <!-- Comidas del día -->
+            <div class="space-y-3">
+                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-400 uppercase">Desayuno</span>
+                    <h4 class="text-sm font-bold text-white">Tostadas integrales con aguacate y huevos escalfados</h4>
+                    <p class="text-xs text-slate-400">2 rebanadas pan masa madre, 2 huevos M, 50g aguacate, café solo.</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-400 uppercase">Almuerzo</span>
+                    <h4 class="text-sm font-bold text-white">Pechuga de pollo a la plancha con arroz e verdura</h4>
+                    <p class="text-xs text-slate-400">180g pechuga, 80g arroz basmati (en seco), salteado de brócoli y zanahoria.</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-400 uppercase">Merienda / Post-entreno</span>
+                    <h4 class="text-sm font-bold text-white">Batido de proteína de suero con plátano y avena</h4>
+                    <p class="text-xs text-slate-400">30g Whey protein, 1 plátano maduro, 40g avena molida.</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-2xl space-y-1">
+                    <span class="text-[10px] font-bold text-indigo-400 uppercase">Cena</span>
+                    <h4 class="text-sm font-bold text-white">Lomo de salmón al horno con patata asada</h4>
+                    <p class="text-xs text-slate-400">160g salmón fresco, 150g patata, ensalada verde con aceite de oliva.</p>
                 </div>
             </div>
         </div>
 
-        <!-- TAB HISTORIAL -->
-        <div id="tab-history" class="tab-content space-y-4">
-            <h2 class="text-lg font-bold text-white">Historial de Registros</h2>
-            <div id="historyList" class="space-y-3"></div>
-        </div>
-
-        <!-- TAB EVOLUCIÓN -->
+        <!-- TAB 4: EVOLUCIÓN & GRÁFICAS -->
         <div id="tab-evolution" class="tab-content space-y-4">
-            <h2 class="text-lg font-bold text-white">Evolución Gráfica</h2>
-            <div class="bg-slate-800 rounded-2xl p-4 border border-slate-700 shadow-lg">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Métrica</span>
-                    <select id="metricSelector" onchange="updateChart()" class="bg-slate-900 text-emerald-400 font-medium text-sm rounded-lg p-2 border border-slate-700">
-                        <option value="peso">Peso (kg)</option>
-                        <option value="cintura">Cintura (cm)</option>
-                        <option value="grasa">% Grasa corporal</option>
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-emerald-400"></i> Evolución Corporal
+                </h2>
+                <button onclick="openFormModal()" class="text-xs bg-emerald-500 text-slate-950 font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-md">
+                    <i class="fa-solid fa-plus"></i> Registrar
+                </button>
+            </div>
+
+            <!-- Gráfico principal -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+                <div class="flex justify-between items-center">
+                    <select id="metricSelect" onchange="updateChart()" class="bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-xl px-3 py-1.5 font-medium focus:ring-1 focus:ring-emerald-500 focus:outline-none">
+                        <option value="weight">Peso Corporal (kg)</option>
+                        <option value="chest">Pecho (cm)</option>
+                        <option value="waist">Cintura (cm)</option>
+                        <option value="abdomen">Abdomen (cm)</option>
+                        <option value="hip">Cadera (cm)</option>
+                        <option value="arm">Brazo Dom. (cm)</option>
+                        <option value="thigh">Muslo Dom. (cm)</option>
                     </select>
                 </div>
-                <div class="relative h-64 w-full">
+
+                <div class="relative w-full h-56">
                     <canvas id="progressChart"></canvas>
                 </div>
             </div>
+
+            <!-- Historial Lista -->
+            <div class="space-y-2">
+                <h3 class="text-xs font-bold text-slate-400 uppercase">Historial de Mediciones</h3>
+                <div id="historyList" class="space-y-2">
+                    <!-- Se renderiza con JS -->
+                </div>
+            </div>
         </div>
 
-        <!-- TAB AJUSTES -->
-        <div id="tab-settings" class="tab-content space-y-4">
-            <h2 class="text-lg font-bold text-white">Configuración y Datos</h2>
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 space-y-3">
-                <div class="border-b border-slate-700 pb-3">
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Nombre del Usuario (Cabecera)</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="userNameInput" placeholder="Introduce tu nombre" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white text-xs focus:outline-none focus:border-emerald-500">
-                        <button onclick="saveUserName()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs px-4 rounded-lg">Guardar</button>
-                    </div>
-                </div>
+        <!-- TAB 5: AJUSTES & CONFIGURACIÓN -->
+        <div id="settings" class="tab-content space-y-4">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-sliders text-emerald-400"></i> Opciones de la Aplicación
+            </h2>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl divide-y divide-slate-800/80">
+                <button onclick="loadDemoData()" class="w-full p-4 flex items-center justify-between text-left text-sm text-emerald-400 hover:bg-slate-800/50 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-flask text-emerald-400 w-5"></i> Cargar datos de prueba</span>
+                    <i class="fa-solid fa-angle-right text-xs text-slate-600"></i>
+                </button>
+                <button onclick="exportJSON()" class="w-full p-4 flex items-center justify-between text-left text-sm text-slate-200 hover:bg-slate-800/50 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-download text-slate-400 w-5"></i> Exportar Copia JSON</span>
+                    <i class="fa-solid fa-angle-right text-xs text-slate-600"></i>
+                </button>
+                <label class="w-full p-4 flex items-center justify-between text-left text-sm text-slate-200 hover:bg-slate-800/50 cursor-pointer transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-upload text-slate-400 w-5"></i> Importar Copia JSON</span>
+                    <input type="file" id="importFileInput" accept=".json" onchange="importJSON(event)" class="hidden">
+                    <i class="fa-solid fa-angle-right text-xs text-slate-600"></i>
+                </label>
+                <button onclick="clearAllData()" class="w-full p-4 flex items-center justify-between text-left text-sm text-rose-400 hover:bg-slate-800/50 transition-colors">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-trash-can text-rose-400 w-5"></i> Borrar todos los datos</span>
+                    <i class="fa-solid fa-angle-right text-xs text-slate-600"></i>
+                </button>
+            </div>
+            
+            <div class="text-center pt-4">
+                <p class="text-xs text-slate-500">Fuerza y Salud • Powered by Harbiz UX</p>
+                <p class="text-[10px] text-slate-600 mt-1">Versión PWA 2.4.0</p>
             </div>
         </div>
 
     </main>
 
-    <!-- Modal Registro -->
-    <div id="entryModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center hidden z-50 p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 space-y-4">
-            <div class="flex justify-between items-center pb-2 border-b border-slate-800">
-                <h3 class="text-lg font-bold text-white">Nuevo Registro</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <!-- NAVEGACIÓN INFERIOR (ESTILO HARBIZ APP) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800/80 px-2 py-2">
+        <div class="max-w-md mx-auto flex justify-around items-center text-center">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex-1 py-1 text-emerald-400 flex flex-col items-center gap-1 transition-colors">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-medium">Inicio</span>
+            </button>
+            <button onclick="switchTab('workout')" id="nav-workout" class="nav-btn flex-1 py-1 text-slate-500 flex flex-col items-center gap-1 transition-colors">
+                <i class="fa-solid fa-dumbbell text-lg"></i>
+                <span class="text-[10px] font-medium">Rutina</span>
+            </button>
+            <button onclick="switchTab('nutrition')" id="nav-nutrition" class="nav-btn flex-1 py-1 text-slate-500 flex flex-col items-center gap-1 transition-colors">
+                <i class="fa-solid fa-utensils text-lg"></i>
+                <span class="text-[10px] font-medium">Nutrición</span>
+            </button>
+            <button onclick="switchTab('evolution')" id="nav-evolution" class="nav-btn flex-1 py-1 text-slate-500 flex flex-col items-center gap-1 transition-colors">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span class="text-[10px] font-medium">Progreso</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MODAL REGISTRO MÉTRICAS -->
+    <div id="formModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 id="modalTitle" class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-emerald-400"></i> Nuevo Registro Corporal
+                </h3>
+                <button onclick="closeFormModal()" class="text-slate-400 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form id="recordForm" onsubmit="saveRecord(event)" class="space-y-4">
+
+            <form id="metricsForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <input type="hidden" id="editIndex" value="-1">
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Fecha</label>
-                    <input type="date" id="inputDate" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm">
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Fecha</label>
+                    <input type="date" id="inputDate" required class="w-full bg-slate-950 border border-slate-800 text-white rounded-xl p-3 text-sm focus:border-emerald-500 focus:outline-none">
                 </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Peso (kg)</label>
-                    <input type="number" step="0.1" id="inputPeso" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Peso (kg)</label>
+                        <input type="number" step="0.1" id="inputWeight" placeholder="75.5" class="w-full bg-slate-950 border border-slate-800 text-white rounded-xl p-3 text-sm focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Pecho (cm)</label>
+                        <input type="number" step="0.1" id="inputChest" placeholder="102.0" class="w-full bg-slate-950 border border-slate-800 text-white rounded-xl p-3 text-sm focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Cintura (cm)</label>
+                        <input type="number" step="0.1" id="inputWaist" placeholder="82.0" class="w-full bg-slate-950 border border-slate-800 text-white rounded-xl p-3 text-sm focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">Abdomen (cm)</label>
+                        <input type="number" step="0.1" id="inputAbdomen" placeholder="85.0" class="w-full bg-slate-950 border border-slate-800 text-white rounded-xl p-3 text-sm focus:border-emerald-500 focus:outline-none">
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg">Guardar Registro</button>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeFormModal()" class="flex-1 bg-slate-800 text-slate-300 font-semibold py-3 rounded-xl">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl shadow-md">Guardar</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- Navegación Inferior -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around p-3 z-20 text-xs">
-        <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center text-emerald-400 font-bold">
-            <i class="fa-solid fa-house text-lg mb-1"></i>
-            <span>Home</span>
-        </button>
-        <button onclick="switchTab('nutrition')" id="nav-nutrition" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
-            <i class="fa-solid fa-utensils text-lg mb-1"></i>
-            <span>Nutrición</span>
-        </button>
-        <button onclick="switchTab('history')" id="nav-history" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
-            <i class="fa-solid fa-calendar-days text-lg mb-1"></i>
-            <span>Historial</span>
-        </button>
-        <button onclick="switchTab('evolution')" id="nav-evolution" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
-            <i class="fa-solid fa-chart-line text-lg mb-1"></i>
-            <span>Evolución</span>
-        </button>
-        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
-            <i class="fa-solid fa-gear text-lg mb-1"></i>
-            <span>Ajustes</span>
-        </button>
-    </nav>
+    <!-- MODAL CRONÓMETRO DE DESCANSO -->
+    <div id="timerModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-xs rounded-3xl p-5 text-center space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <span class="text-xs font-bold text-slate-400 uppercase">Temporizador Descanso</span>
+                <button onclick="toggleTimerModal()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="text-4xl font-black text-emerald-400 font-mono tracking-wider py-2" id="timerDisplay">
+                01:30
+            </div>
+            <div class="flex justify-center gap-2">
+                <button onclick="startTimer(60)" class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-2 rounded-xl border border-slate-700">60s</button>
+                <button onclick="startTimer(90)" class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-2 rounded-xl border border-slate-700">90s</button>
+                <button onclick="startTimer(120)" class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-2 rounded-xl border border-slate-700">120s</button>
+            </div>
+            <button onclick="resetTimer()" class="w-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold py-2.5 rounded-xl">Detener / Reset</button>
+        </div>
+    </div>
 
+    <!-- TOAST NOTIFICACIÓN -->
+    <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 px-4 py-2 rounded-full font-semibold text-xs shadow-lg opacity-0 transition-opacity pointer-events-none z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMsg">Mensaje</span>
+    </div>
+
+    <!-- LOGIC SCRIPT -->
     <script>
-        let records = JSON.parse(localStorage.getItem('fitnessRecords')) || [];
+        const METRICS = {
+            weight: { name: 'Peso', unit: 'kg' },
+            chest: { name: 'Pecho', unit: 'cm' },
+            waist: { name: 'Cintura', unit: 'cm' },
+            abdomen: { name: 'Abdomen', unit: 'cm' },
+            hip: { name: 'Cadera', unit: 'cm' },
+            arm: { name: 'Brazo', unit: 'cm' },
+            thigh: { name: 'Muslo', unit: 'cm' }
+        };
 
-        // Carga Inicial del Nombre
-        document.addEventListener("DOMContentLoaded", function() {
-            const savedUserName = localStorage.getItem('userName');
-            if (savedUserName) {
-                document.getElementById('headerUserName').innerText = savedUserName.toUpperCase();
-                document.getElementById('userNameInput').value = savedUserName;
-            }
-        });
+        let records = [];
+        let chartInstance = null;
+        let timerInterval = null;
 
-        function saveUserName() {
-            const nameInput = document.getElementById('userNameInput').value.trim();
-            if (nameInput) {
-                localStorage.setItem('userName', nameInput);
-                document.getElementById('headerUserName').innerText = nameInput.toUpperCase();
-                alert('¡Nombre actualizado con éxito!');
+        window.onload = function() {
+            document.getElementById('inputDate').value = new Date().toISOString().split('T')[0];
+            loadFromLocalStorage();
+            if (records.length === 0) {
+                generateDemoData();
             }
-        }
+            initChart();
+            renderUI();
+        };
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            const target = document.getElementById(`tab-${tabId}`);
-            if (target) target.classList.add('active');
-
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.className = 'nav-btn flex flex-col items-center text-slate-400 hover:text-white';
+                btn.classList.remove('text-emerald-400');
+                btn.classList.add('text-slate-500');
             });
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            if (activeNav) activeNav.className = 'nav-btn flex flex-col items-center text-emerald-400 font-bold';
 
-            window.scrollTo(0, 0);
-        }
+            const activeTab = document.getElementById('tab-' + tabId) || document.getElementById(tabId);
+            if (activeTab) activeTab.classList.add('active');
 
-        function toggleShoppingList(listId) {
-            document.getElementById(listId).classList.toggle('hidden');
-        }
-
-        function openModal() {
-            document.getElementById('entryModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('entryModal').classList.add('hidden');
-        }
-
-        function saveRecord(e) {
-            e.preventDefault();
-            const peso = parseFloat(document.getElementById('inputPeso').value) || null;
-            if(peso) {
-                records.push({ date: new Date().toISOString().slice(0,10), peso: peso });
-                localStorage.setItem('fitnessRecords', JSON.stringify(records));
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-500');
+                activeNav.classList.add('text-emerald-400');
             }
-            closeModal();
+
+            if (tabId === 'evolution') {
+                setTimeout(updateChart, 100);
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('harbiz_fit_data', JSON.stringify(records));
+        }
+
+        function loadFromLocalStorage() {
+            const data = localStorage.getItem('harbiz_fit_data');
+            if (data) {
+                try {
+                    records = JSON.parse(data);
+                    sortRecords();
+                } catch (e) {
+                    records = [];
+                }
+            }
+        }
+
+        function sortRecords() {
+            records.sort((a, b) => new Date(a.date) - new Date(b.date));
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 2200);
+        }
+
+        function openFormModal(editIdx = -1) {
+            const modal = document.getElementById('formModal');
+            document.getElementById('metricsForm').reset();
+            document.getElementById('editIndex').value = editIdx;
+
+            if (editIdx >= 0) {
+                const rec = records[editIdx];
+                document.getElementById('inputDate').value = rec.date;
+                for (let key in METRICS) {
+                    const input = document.getElementById('input' + capitalize(key));
+                    if (input && rec[key] !== undefined) input.value = rec[key];
+                }
+            } else {
+                document.getElementById('inputDate').value = new Date().toISOString().split('T')[0];
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeFormModal() {
+            document.getElementById('formModal').classList.add('hidden');
+        }
+
+        function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const editIdx = parseInt(document.getElementById('editIndex').value);
+            const dateVal = document.getElementById('inputDate').value;
+            if (!dateVal) return;
+
+            const newRecord = { date: dateVal };
+            let hasValue = false;
+
+            for (let key in METRICS) {
+                const val = parseFloat(document.getElementById('input' + capitalize(key))?.value);
+                if (!isNaN(val)) {
+                    newRecord[key] = val;
+                    hasValue = true;
+                }
+            }
+
+            if (!hasValue) { showToast("Ingresa al menos un valor"); return; }
+
+            if (editIdx >= 0) {
+                records[editIdx] = newRecord;
+                showToast("Registro actualizado");
+            } else {
+                const existingIndex = records.findIndex(r => r.date === dateVal);
+                if (existingIndex >= 0) {
+                    records[existingIndex] = { ...records[existingIndex], ...newRecord };
+                } else {
+                    records.push(newRecord);
+                }
+                showToast("Registro guardado");
+            }
+
+            sortRecords();
+            saveToLocalStorage();
+            renderUI();
+            closeFormModal();
+        }
+
+        function deleteRecord(idx) {
+            if (confirm("¿Eliminar registro?")) {
+                records.splice(idx, 1);
+                saveToLocalStorage();
+                renderUI();
+                showToast("Registro borrado");
+            }
+        }
+
+        function renderUI() {
+            if (records.length > 0) {
+                const last = records[records.length - 1];
+                document.getElementById('homeStatWeight').innerText = last.weight ? last.weight.toFixed(1) : '--';
+                document.getElementById('homeStatWaist').innerText = last.waist ? last.waist.toFixed(1) : '--';
+            }
+            renderHistoryList();
+            updateChart();
+        }
+
+        function renderHistoryList() {
+            const container = document.getElementById('historyList');
+            container.innerHTML = '';
+
+            if (records.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-4">No hay mediciones aún.</p>`;
+                return;
+            }
+
+            [...records].map((item, originalIndex) => ({ ...item, originalIndex })).reverse().forEach(rec => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800/80 rounded-xl p-3 flex justify-between items-center text-xs";
+                card.innerHTML = `
+                    <div>
+                        <span class="font-bold text-white block">${rec.date}</span>
+                        <span class="text-emerald-400 font-mono">${rec.weight ? rec.weight + ' kg' : ''} ${rec.waist ? '• Cintura: ' + rec.waist + ' cm' : ''}</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openFormModal(${rec.originalIndex})" class="text-slate-400 hover:text-emerald-400"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteRecord(${rec.originalIndex})" class="text-slate-400 hover:text-rose-400"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Medición',
+                        data: [],
+                        borderColor: '#10b981',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#10b981',
+                        fill: false,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 10 } } },
+                        y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        function updateChart() {
+            if (!chartInstance) return;
+            const selectedMetric = document.getElementById('metricSelect').value;
+            const filtered = records.filter(r => r[selectedMetric] !== undefined);
+
+            chartInstance.data.labels = filtered.map(r => r.date.split('-').slice(1).join('/'));
+            chartInstance.data.datasets[0].data = filtered.map(r => r[selectedMetric]);
+            chartInstance.update();
+        }
+
+        function generateDemoData() {
+            const today = new Date();
+            const demo = [];
+            for (let i = 4; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(today.getDate() - (i * 14));
+                demo.push({
+                    date: d.toISOString().split('T')[0],
+                    weight: parseFloat((78 - (i * 0.5)).toFixed(1)),
+                    waist: parseFloat((84 - (i * 0.6)).toFixed(1)),
+                    chest: parseFloat((100 - (i * 0.2)).toFixed(1))
+                });
+            }
+            records = demo;
+            sortRecords();
+            saveToLocalStorage();
+        }
+
+        function loadDemoData() {
+            generateDemoData();
+            renderUI();
+            showToast("Datos de prueba cargados");
+        }
+
+        function clearAllData() {
+            if (confirm("¿Borrar todo?")) {
+                records = [];
+                saveToLocalStorage();
+                renderUI();
+                showToast("Datos eliminados");
+            }
+        }
+
+        function exportJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `Harbiz_Backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importJSON(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    records = JSON.parse(evt.target.result);
+                    sortRecords();
+                    saveToLocalStorage();
+                    renderUI();
+                    showToast("Datos importados");
+                } catch (err) { alert("Archivo no válido"); }
+            };
+            reader.readAsText(file);
+        }
+
+        // Timer Functions
+        function toggleTimerModal() {
+            document.getElementById('timerModal').classList.toggle('hidden');
+        }
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            let remaining = seconds;
+            updateTimerDisplay(remaining);
+            timerInterval = setInterval(() => {
+                remaining--;
+                updateTimerDisplay(remaining);
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    showToast("¡Tiempo de descanso finalizado!");
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            updateTimerDisplay(0);
+        }
+
+        function updateTimerDisplay(sec) {
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = (sec % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${m}:${s}`;
         }
     </script>
 </body>
 </html>
+```
