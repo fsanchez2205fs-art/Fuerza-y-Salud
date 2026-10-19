@@ -5,30 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuerza y Salud</title>
     
-    <!-- Manifiesto dinámico para PWA con el logo moderno -->
-    <link rel="manifest" href='data:application/manifest+json,{
-        "name": "Fuerza y Salud",
-        "short_name": "Fuerza y Salud",
-        "start_url": "./index.html",
-        "display": "standalone",
-        "background_color": "#0f172a",
-        "theme_color": "#0f172a",
-        "icons": [
-            {
-                "src": "https://img.icons8.com/isometric/192/activity.png",
-                "sizes": "192x192",
-                "type": "image/png"
-            },
-            {
-                "src": "https://img.icons8.com/isometric/512/activity.png",
-                "sizes": "512x512",
-                "type": "image/png"
-            }
-        ]
-    }'>
-
-    <!-- Iconos para Apple y navegador -->
-    <link rel="icon" type="image/png" href="https://img.icons8.com/isometric/96/activity.png">
+    <!-- Icono e integración PWA para pantalla de inicio -->
+    <link rel="icon" type="image/png" sizes="192x192" href="https://img.icons8.com/isometric/192/activity.png">
     <link rel="apple-touch-icon" href="https://img.icons8.com/isometric/180/activity.png">
     
     <!-- Tailwind CSS -->
@@ -49,7 +27,7 @@
 </head>
 <body class="pb-24">
 
-    <!-- Top Header -->
+    <!-- Header Superior -->
     <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-10 flex justify-between items-center">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold">
@@ -57,7 +35,7 @@
             </div>
             <div>
                 <p class="text-xs text-slate-400">Buenos días,</p>
-                <h2 id="headerUserName" class="text-sm font-bold text-white tracking-wide">FRANCISCO JAVIER</h2>
+                <h2 id="headerUserName" class="text-sm font-bold text-white tracking-wide">USUARIO</h2>
             </div>
         </div>
         <div class="flex items-center gap-2">
@@ -67,19 +45,20 @@
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Contenido Principal -->
     <main class="p-4 max-w-md mx-auto">
 
-        <!-- TAB 1: HOME / PLAN DE HOY -->
+        <!-- TAB 1: INICIO / PLAN DE HOY -->
         <div id="tab-home" class="tab-content active space-y-6">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-white">Plan de hoy</h1>
-                <span class="text-xs text-emerald-400 font-semibold cursor-pointer" onclick="switchTab('history')">Ver historial</span>
+                <button onclick="switchTab('history')" class="text-xs text-emerald-400 font-semibold">Ver historial</button>
             </div>
 
-            <!-- Timeline / Status Cards -->
+            <!-- Tarjetas de Navegación -->
             <div class="space-y-3 relative before:absolute before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-700">
                 
+                <!-- Estado Físico -->
                 <div class="relative pl-10">
                     <div class="absolute left-2.5 top-3.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-4 ring-slate-900"></div>
                     <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-md flex justify-between items-center">
@@ -94,9 +73,10 @@
                     </div>
                 </div>
 
+                <!-- Actividad Diaria -->
                 <div class="relative pl-10">
                     <div class="absolute left-2.5 top-3.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-rose-500 ring-4 ring-slate-900"></div>
-                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-md flex justify-between items-center cursor-pointer" onclick="switchTab('workout')">
+                    <div onclick="switchTab('workout')" class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-md flex justify-between items-center cursor-pointer hover:border-rose-500/50 transition-colors">
                         <div>
                             <span class="text-xs font-semibold text-rose-400 uppercase">Actividad diaria</span>
                             <h3 class="font-bold text-white text-sm mt-0.5">Entrenamiento de Fuerza y Vídeos</h3>
@@ -106,9 +86,10 @@
                     </div>
                 </div>
 
+                <!-- Nutrición -->
                 <div class="relative pl-10">
                     <div class="absolute left-2.5 top-3.5 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-amber-500 ring-4 ring-slate-900"></div>
-                    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-md flex justify-between items-center cursor-pointer" onclick="switchTab('nutrition')">
+                    <div onclick="switchTab('nutrition')" class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 shadow-md flex justify-between items-center cursor-pointer hover:border-amber-500/50 transition-colors">
                         <div>
                             <span class="text-xs font-semibold text-amber-400 uppercase">Nutrición & Fases</span>
                             <h3 class="font-bold text-white text-sm mt-0.5">Planes y Listas de la Compra</h3>
@@ -121,7 +102,7 @@
             </div>
         </div>
 
-        <!-- TAB WORKOUT: ENTRENAMIENTO Y VÍDEOS -->
+        <!-- TAB ENTRENAMIENTO Y VÍDEOS -->
         <div id="tab-workout" class="tab-content space-y-4">
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-bold text-white">Plan de Fuerza (Fase 1)</h2>
@@ -166,12 +147,11 @@
             </div>
         </div>
 
-        <!-- TAB 2: NUTRICIÓN Y FASES -->
+        <!-- TAB NUTRICIÓN Y FASES -->
         <div id="tab-nutrition" class="tab-content space-y-4">
             <h2 class="text-lg font-bold text-white">Nutrición por Fase (F90)</h2>
             
             <div class="space-y-4">
-                <!-- Fase 1 -->
                 <div class="bg-slate-800 border border-emerald-500/40 rounded-2xl p-4 space-y-3 shadow-lg">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-2">
                         <span class="text-xs font-bold text-emerald-400 uppercase">Fase 1 — Programa F90</span>
@@ -179,92 +159,18 @@
                     </div>
 
                     <div class="space-y-3 text-xs text-slate-300">
-                        <!-- LUNES -->
+                        <!-- Menús semanales -->
                         <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
                             <div class="font-bold text-emerald-400 mb-1 flex justify-between">
                                 <span>Lunes (1.226 kcal)</span>
                                 <span class="text-slate-400">P: 79g | C: 162g | G: 29g</span>
                             </div>
-                            <p class="text-slate-300"><strong>Desayuno (348 kcal):</strong> 100g Café/infusión, 70g Pan centeno (Mercadona), 15g AOVE, 20g Jamón serrano.</p>
-                            <p class="text-slate-300 mt-1"><strong>Comida (567 kcal):</strong> 100g Ternera, 100g Arroz, 100g Piña.</p>
-                            <p class="text-slate-300 mt-1"><strong>Snack (52 kcal):</strong> 100g Yogur + proteínas natural (Mercadona).</p>
-                            <p class="text-slate-300 mt-1"><strong>Cena (259 kcal):</strong> Aliño con 100g Patata cocida Ybarra, 100g Atún natural, 100g Cebolla, 100g Pimiento rojo asado, 100g Mandarina.</p>
-                        </div>
-
-                        <!-- MARTES -->
-                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
-                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
-                                <span>Martes (1.763 kcal)</span>
-                                <span class="text-slate-400">P: 107g | C: 177g | G: 69g</span>
-                            </div>
-                            <p class="text-slate-300"><strong>Desayuno (571 kcal):</strong> 100g Café/infusión, 70g Pan espelta integral, 20g AOVE, 100g Lomo embuchado (Mercadona).</p>
-                            <p class="text-slate-300 mt-1"><strong>Comida (786 kcal):</strong> Arroz 3 delicias (100g Arroz, 100g Huevo fresco, 100g Pavo fiambre, 100g Zanahoria, 100g Guisantes).</p>
-                            <p class="text-slate-300 mt-1"><strong>Snack (170 kcal):</strong> 30g Frutos secos (nueces, almendras, anacardos).</p>
-                            <p class="text-slate-300 mt-1"><strong>Cena (236 kcal):</strong> 100g Merluza, 100g Batata, 100g Melocotón (al horno).</p>
-                        </div>
-
-                        <!-- MIÉRCOLES -->
-                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
-                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
-                                <span>Miércoles (1.620 kcal)</span>
-                                <span class="text-slate-400">P: 98g | C: 167g | G: 66g</span>
-                            </div>
-                            <p class="text-slate-300"><strong>Desayuno (619 kcal):</strong> 100g Café/infusión, 70g Pan integral thin, 10g AOVE, 100g Lacón.</p>
-                            <p class="text-slate-300 mt-1"><strong>Comida (596 kcal):</strong> Cous-cous con pollo (100g Cous-cous, 100g Calabacín, 100g Pimiento rojo/verde, 100g Zanahoria, 100g Tiras de pollo natural Mercadona).</p>
-                            <p class="text-slate-300 mt-1"><strong>Snack (50 kcal):</strong> 100g Manzana.</p>
-                            <p class="text-slate-300 mt-1"><strong>Cena (355 kcal):</strong> Salteado de espinacas y garbanzos (100g Espinacas, 100g Garbanzo cocido Mercadona, 100g Leche de coco, 100g Ajo, 100g Gelatina + proteína).</p>
-                        </div>
-
-                        <!-- JUEVES -->
-                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
-                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
-                                <span>Jueves (1.157 kcal)</span>
-                                <span class="text-slate-400">P: 90g | C: 88g | G: 58g</span>
-                            </div>
-                            <p class="text-slate-300"><strong>Desayuno (444 kcal):</strong> 100g Café/infusión, 70g Pan centeno, 100g Pollo asado en lonchas La Carloteña, 15g AOVE.</p>
-                            <p class="text-slate-300 mt-1"><strong>Comida (480 kcal):</strong> 120g Pechuga de pavo, 100g Quinoa o Arroz integral, Ensalada verde variada.</p>
-                            <p class="text-slate-300 mt-1"><strong>Snack (80 kcal):</strong> 1 Yogur proteico sabor a elegir.</p>
-                            <p class="text-slate-300 mt-1"><strong>Cena (153 kcal):</strong> Tortilla de 2 claras y 1 yema con 100g champiñones al ajillo.</p>
-                        </div>
-
-                        <!-- VIERNES -->
-                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
-                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
-                                <span>Viernes (1.540 kcal)</span>
-                                <span class="text-slate-400">P: 102g | C: 155g | G: 52g</span>
-                            </div>
-                            <p class="text-slate-300"><strong>Desayuno (420 kcal):</strong> 100g Café/infusión, 70g Pan de espelta, 15g AOVE, 80g Jamón de pavo.</p>
-                            <p class="text-slate-300 mt-1"><strong>Comida (610 kcal):</strong> 120g Salmón a la plancha, 100g Patata asada, 100g Brócoli al vapor.</p>
-                            <p class="text-slate-300 mt-1"><strong>Snack (130 kcal):</strong> 1 Manzana + 15g Almendras al natural.</p>
-                            <p class="text-slate-300 mt-1"><strong>Cena (380 kcal):</strong> Ensalada templada con 100g Pollo a la plancha, 80g Canónigos, 50g Queso fresco 0% y aliño con AOVE.</p>
-                        </div>
-
-                        <!-- SÁBADO -->
-                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
-                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
-                                <span>Sábado (1.680 kcal)</span>
-                                <span class="text-slate-400">P: 110g | C: 170g | G: 58g</span>
-                            </div>
-                            <p class="text-slate-300"><strong>Desayuno (510 kcal):</strong> 100g Café/infusión, Tortitas de avena (40g avena + 3 claras), 15g Mantequilla de cacahuete.</p>
-                            <p class="text-slate-300 mt-1"><strong>Comida (650 kcal):</strong> Wok de Ternera (120g Ternera limpia, 100g Fideos de arroz, verduras variadas salteadas).</p>
-                            <p class="text-slate-300 mt-1"><strong>Snack (120 kcal):</strong> 1 Yogur proteico + 100g Frutos rojos.</p>
-                            <p class="text-slate-300 mt-1"><strong>Cena (400 kcal):</strong> Hamburguesa de pollo casera (120g) al plato con patata dulce (batata) al horno y ensalada.</p>
-                        </div>
-
-                        <!-- DOMINGO -->
-                        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50">
-                            <div class="font-bold text-emerald-400 mb-1 flex justify-between">
-                                <span>Domingo (1.450 kcal)</span>
-                                <span class="text-slate-400">P: 95g | C: 140g | G: 48g</span>
-                            </div>
-                            <p class="text-slate-300"><strong>Desayuno (400 kcal):</strong> 100g Café/infusión, 70g Pan integral, 1/2 Aguacate, 50g Pavo.</p>
-                            <p class="text-slate-300 mt-1"><strong>Comida (580 kcal):</strong> Paella/Arroz marinero fit (100g Arroz, 100g Calamar/Sepia, 80g Gambas, verduras).</p>
-                            <p class="text-slate-300 mt-1"><strong>Snack (100 kcal):</strong> Gelatina proteica + Infusión digestiva.</p>
-                            <p class="text-slate-300 mt-1"><strong>Cena (370 kcal):</strong> Revoltorio de 2 huevos con espárragos trigueros y gulas, acompañado de ensalada de tomate.</p>
+                            <p class="text-slate-300"><strong>Desayuno:</strong> Café/infusión, 70g Pan centeno, 15g AOVE, 20g Jamón serrano.</p>
+                            <p class="text-slate-300 mt-1"><strong>Comida:</strong> 100g Ternera, 100g Arroz, 100g Piña.</p>
+                            <p class="text-slate-300 mt-1"><strong>Cena:</strong> Aliño con patata cocida, atún natural, cebolla y pimiento.</p>
                         </div>
                     </div>
 
-                    <!-- LISTA DE LA COMPRA FASE 1 -->
                     <div class="mt-4 pt-3 border-t border-slate-700">
                         <button onclick="toggleShoppingList('shop-fase1')" class="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-xl p-2.5 font-bold text-xs flex justify-between items-center transition-colors">
                             <span><i class="fa-solid fa-cart-shopping mr-2"></i> Lista de la Compra Semanal (Fase 1)</span>
@@ -272,4 +178,154 @@
                         </button>
                         
                         <div id="shop-fase1" class="hidden mt-3 p-3 bg-slate-900/80 rounded-xl border border-slate-700 text-xs space-y-3">
-  
+                            <p class="text-slate-300">Consulta ingredientes esenciales en la carnicería, pescadería y frutería.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB HISTORIAL -->
+        <div id="tab-history" class="tab-content space-y-4">
+            <h2 class="text-lg font-bold text-white">Historial de Registros</h2>
+            <div id="historyList" class="space-y-3"></div>
+        </div>
+
+        <!-- TAB EVOLUCIÓN -->
+        <div id="tab-evolution" class="tab-content space-y-4">
+            <h2 class="text-lg font-bold text-white">Evolución Gráfica</h2>
+            <div class="bg-slate-800 rounded-2xl p-4 border border-slate-700 shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Métrica</span>
+                    <select id="metricSelector" onchange="updateChart()" class="bg-slate-900 text-emerald-400 font-medium text-sm rounded-lg p-2 border border-slate-700">
+                        <option value="peso">Peso (kg)</option>
+                        <option value="cintura">Cintura (cm)</option>
+                        <option value="grasa">% Grasa corporal</option>
+                    </select>
+                </div>
+                <div class="relative h-64 w-full">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB AJUSTES -->
+        <div id="tab-settings" class="tab-content space-y-4">
+            <h2 class="text-lg font-bold text-white">Configuración y Datos</h2>
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 space-y-3">
+                <div class="border-b border-slate-700 pb-3">
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Nombre del Usuario (Cabecera)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="userNameInput" placeholder="Introduce tu nombre" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white text-xs focus:outline-none focus:border-emerald-500">
+                        <button onclick="saveUserName()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs px-4 rounded-lg">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Registro -->
+    <div id="entryModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center hidden z-50 p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+                <h3 class="text-lg font-bold text-white">Nuevo Registro</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form id="recordForm" onsubmit="saveRecord(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Fecha</label>
+                    <input type="date" id="inputDate" required class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Peso (kg)</label>
+                    <input type="number" step="0.1" id="inputPeso" placeholder="0.0" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white text-sm">
+                </div>
+                <button type="submit" class="w-full bg-emerald-500 text-slate-950 font-bold py-3 rounded-lg">Guardar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Navegación Inferior -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around p-3 z-20 text-xs">
+        <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center text-emerald-400 font-bold">
+            <i class="fa-solid fa-house text-lg mb-1"></i>
+            <span>Home</span>
+        </button>
+        <button onclick="switchTab('nutrition')" id="nav-nutrition" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
+            <i class="fa-solid fa-utensils text-lg mb-1"></i>
+            <span>Nutrición</span>
+        </button>
+        <button onclick="switchTab('history')" id="nav-history" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
+            <i class="fa-solid fa-calendar-days text-lg mb-1"></i>
+            <span>Historial</span>
+        </button>
+        <button onclick="switchTab('evolution')" id="nav-evolution" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
+            <i class="fa-solid fa-chart-line text-lg mb-1"></i>
+            <span>Evolución</span>
+        </button>
+        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white">
+            <i class="fa-solid fa-gear text-lg mb-1"></i>
+            <span>Ajustes</span>
+        </button>
+    </nav>
+
+    <script>
+        let records = JSON.parse(localStorage.getItem('fitnessRecords')) || [];
+
+        // Carga Inicial del Nombre
+        document.addEventListener("DOMContentLoaded", function() {
+            const savedUserName = localStorage.getItem('userName');
+            if (savedUserName) {
+                document.getElementById('headerUserName').innerText = savedUserName.toUpperCase();
+                document.getElementById('userNameInput').value = savedUserName;
+            }
+        });
+
+        function saveUserName() {
+            const nameInput = document.getElementById('userNameInput').value.trim();
+            if (nameInput) {
+                localStorage.setItem('userName', nameInput);
+                document.getElementById('headerUserName').innerText = nameInput.toUpperCase();
+                alert('¡Nombre actualizado con éxito!');
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = 'nav-btn flex flex-col items-center text-slate-400 hover:text-white';
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) activeNav.className = 'nav-btn flex flex-col items-center text-emerald-400 font-bold';
+
+            window.scrollTo(0, 0);
+        }
+
+        function toggleShoppingList(listId) {
+            document.getElementById(listId).classList.toggle('hidden');
+        }
+
+        function openModal() {
+            document.getElementById('entryModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('entryModal').classList.add('hidden');
+        }
+
+        function saveRecord(e) {
+            e.preventDefault();
+            const peso = parseFloat(document.getElementById('inputPeso').value) || null;
+            if(peso) {
+                records.push({ date: new Date().toISOString().slice(0,10), peso: peso });
+                localStorage.setItem('fitnessRecords', JSON.stringify(records));
+            }
+            closeModal();
+        }
+    </script>
+</body>
+</html>
