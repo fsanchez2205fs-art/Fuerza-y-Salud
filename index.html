@@ -1,12 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mesociclo 3 - Control de Entrenamiento (6 Semanas)</title>
+  <title>Control de Entrenamiento - Fuerza y Salud</title>
   <link rel="manifest" href="manifest.json">
-  
   <style>
     :root {
       --bg-primary: #121824;
@@ -375,17 +373,31 @@
 <body>
 
   <header>
-    <h1>Mesociclo 3 (6 Semanas)</h1>
+    <h1 id="app-title">Mesociclo 3 (6 Semanas)</h1>
     <div class="top-controls">
       <div class="week-selector-box">
-        <span>Semana:</span>
+        <span>Fase / Semana:</span>
         <select id="current-week-select" onchange="switchWeek(this.value)">
-          <option value="1">Semana 1</option>
-          <option value="2">Semana 2</option>
-          <option value="3">Semana 3</option>
-          <option value="4">Semana 4</option>
-          <option value="5">Semana 5</option>
-          <option value="6">Semana 6 (Descarga/Pico)</option>
+          <optgroup label="Fase 1 (4 Sesiones)">
+            <option value="f1_s1">Fase 1 - Semana 1</option>
+            <option value="f1_s2">Fase 1 - Semana 2</option>
+            <option value="f1_s3">Fase 1 - Semana 3</option>
+            <option value="f1_s4">Fase 1 - Semana 4</option>
+          </optgroup>
+          <optgroup label="Fase 2 (4 Sesiones)">
+            <option value="f2_s1">Fase 2 - Semana 1</option>
+            <option value="f2_s2">Fase 2 - Semana 2</option>
+            <option value="f2_s3">Fase 2 - Semana 3</option>
+            <option value="f2_s4">Fase 2 - Semana 4</option>
+          </optgroup>
+          <optgroup label="Mesociclo 3">
+            <option value="1">Mesociclo 3 - Semana 1</option>
+            <option value="2">Mesociclo 3 - Semana 2</option>
+            <option value="3">Mesociclo 3 - Semana 3</option>
+            <option value="4">Mesociclo 3 - Semana 4</option>
+            <option value="5">Mesociclo 3 - Semana 5</option>
+            <option value="6">Mesociclo 3 - Semana 6 (Descarga/Pico)</option>
+          </optgroup>
         </select>
       </div>
 
@@ -421,14 +433,14 @@
 
       <div class="history-log">
         <h3>Historial de la última sesión guardada</h3>
-        <div id="history-content">No hay registros guardados aún para esta semana.</div>
+        <div id="history-content">No hay registros guardados aún para esta selección.</div>
       </div>
     </div>
 
     <!-- VISTA DE MIÉRCOLES (MÉTRICAS + FOTOS) -->
     <div id="metrics-view" style="display: none;">
       <div class="metrics-card">
-        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-bottom: 10px;">📏 Registro de Métricas y Fotos (Semana <span class="active-week-num">1</span>)</h2>
+        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-bottom: 10px;">📏 Registro de Métricas y Fotos (<span class="active-week-label">Semana 1</span>)</h2>
         <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Día de descanso activo: Toma tus medidas y fotos por la mañana en ayunas.</p>
 
         <div class="metric-row">
@@ -466,7 +478,7 @@
 
         <!-- MÓDULO DE FOTOS -->
         <div class="photo-upload-box">
-          <h3 style="font-size: 0.9rem; color: var(--accent); margin-bottom: 10px;">📷 Fotos Semanales de Progreso</h3>
+          <h3 style="font-size: 0.9rem; color: var(--accent); margin-bottom: 10px;">📷 Fotos de Progreso</h3>
           
           <div class="photo-input-group">
             <label>1. Foto de Frente:</label>
@@ -489,7 +501,7 @@
         </div>
 
         <div class="actions">
-          <button type="button" class="btn btn-save" onclick="saveMetrics()">Guardar Métricas de Semana <span class="active-week-num">1</span></button>
+          <button type="button" class="btn btn-save" onclick="saveMetrics()">Guardar Métricas (<span class="active-week-label">Semana 1</span>)</button>
         </div>
       </div>
     </div>
@@ -497,14 +509,14 @@
     <!-- VISTA DE PROGRESO -->
     <div id="progress-view" style="display: none;">
       <div class="metrics-card">
-        <h2 style="font-size: 1.1rem; color: var(--success); margin-bottom: 10px;">📊 Evolución del Mesociclo (6 Semanas)</h2>
+        <h2 style="font-size: 1.1rem; color: var(--success); margin-bottom: 10px;">📊 Evolución del Bloque</h2>
         <div id="progress-table-container">Cargando datos...</div>
         
-        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-top: 25px; margin-bottom: 10px;">📷 Galería de Fotos del Mesociclo</h2>
+        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-top: 25px; margin-bottom: 10px;">📷 Galería de Fotos</h2>
         <div id="progress-photos-container">No hay fotos guardadas aún.</div>
 
         <div class="actions" style="margin-top: 20px;">
-          <button type="button" class="btn btn-reset" onclick="clearAllMetrics()">Borrar Historial de las 6 Semanas</button>
+          <button type="button" class="btn btn-reset" onclick="clearAllMetrics()">Borrar Historial de este Bloque</button>
         </div>
       </div>
     </div>
@@ -512,9 +524,81 @@
   </div>
 
   <script>
-    // Progresión base de porcentajes para las 6 semanas (+2.5% a +5% por semana)
+    // Multiplicadores de progresión
     const weekPctMultipliers = { 1: 1.0, 2: 1.03, 3: 1.06, 4: 1.10, 5: 1.13, 6: 0.90 };
+    const f1Multipliers = { 'f1_s1': 1.0, 'f1_s2': 1.03, 'f1_s3': 1.06, 'f1_s4': 1.10 };
+    const f2Multipliers = { 'f2_s1': 1.0, 'f2_s2': 1.03, 'f2_s3': 1.06, 'f2_s4': 1.10 };
 
+    // FASE 1
+    const phase1WorkoutData = {
+      LUNES: [
+        { name: "Flexiones", target: "3 series | 10-12 reps", sets: 3, pct: 50, note: "Peso corporal / Autocarga", video: "https://www.youtube.com/results?search_query=flexiones+tecnica" },
+        { name: "Remo Pendlay", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Barra con control técnico", video: "https://www.youtube.com/results?search_query=remo+pendlay" },
+        { name: "Press militar con mancuernas", target: "3 series | 10-12 reps", sets: 3, pct: 40, note: "~20% cada mancuerna", video: "https://www.youtube.com/results?search_query=press+militar+mancuernas" },
+        { name: "Curl bíceps con mancuerna", target: "3 series | 10-12 reps", sets: 3, pct: 20, note: "Curl alterno o simultáneo", video: "https://www.youtube.com/results?search_query=curl+biceps+mancuerna" },
+        { name: "Tríceps OH mancuerna", target: "3 series | 10-12 reps", sets: 3, pct: 25, note: "Extensión de tríceps tras nuca", video: "https://www.youtube.com/results?search_query=triceps+tras+nuca+mancuerna" },
+        { name: "Plancha abdominal (con disco)", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Autocarga o con disco ligero", video: "https://www.youtube.com/results?search_query=plancha+abdominal+con+disco" }
+      ],
+      MARTES: [
+        { name: "Sentadilla Búlgara Cuádriceps", target: "3 series | 10-12 reps/pierna", sets: 3, pct: 35, note: "Enfoque en cuádriceps", video: "https://www.youtube.com/results?search_query=sentadilla+bulgara+cuadriceps" },
+        { name: "Peso muerto rumano", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Con barra o mancuernas", video: "https://www.youtube.com/results?search_query=peso+muerto+rumano" },
+        { name: "Zancada frontal goblet (Forward Lunge)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Kettlebell o mancuerna al pecho", video: "https://www.youtube.com/results?search_query=zancada+frontal+goblet" },
+        { name: "Curl de isquios a una pierna (Single Leg Curl Slide)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Con toalla/slider en suelo", video: "https://www.youtube.com/results?search_query=curl+isquios+slider+una+pierna" },
+        { name: "Puente de Glúteo unilateral con KB", target: "3 series | 10-12 reps/pierna", sets: 3, pct: 25, note: "Kettlebell sobre la cadera", video: "https://www.youtube.com/results?search_query=puente+gluteo+unilateral+kb" }
+      ],
+      JUEVES: [
+        { name: "Remo unilateral con mancuerna", target: "3 series | 10-12 reps", sets: 3, pct: 35, note: "Apoyado en banco", video: "https://www.youtube.com/results?search_query=remo+unilateral+mancuerna" },
+        { name: "Press banca", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Pies por detrás de la rodilla", video: "https://www.youtube.com/results?search_query=press+banca+tecnica" },
+        { name: "Pájaro con mancuernas", target: "3 series | 10-12 reps", sets: 3, pct: 18, note: "Deltoides posterior inclinado", video: "https://www.youtube.com/results?search_query=pajaro+mancuernas+deltoides" },
+        { name: "Curl Scott", target: "3 series | 10-12 reps", sets: 3, pct: 22, note: "Con mancuerna o barra Z", video: "https://www.youtube.com/results?search_query=curl+scott+mancuerna" },
+        { name: "Press Pallof en polea", target: "3 series | 10-12 reps/lado", sets: 3, pct: 15, note: "Antirotación con polea o goma", video: "https://www.youtube.com/results?search_query=press+pallof+polea" }
+      ],
+      VIERNES: [
+        { name: "Sentadilla con KB bilateral", target: "3 series | 10-12 reps", sets: 3, pct: 45, note: "Dos kettlebells o mancuernas", video: "https://www.youtube.com/results?search_query=sentadilla+kettlebell+bilateral" },
+        { name: "Peso muerto piernas rígidas con barra", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Barra pegada a las tibias", video: "https://www.youtube.com/results?search_query=peso+muerto+piernas+rigidas" },
+        { name: "Zancada frontal con 2 kettlebell (Forward Lunge)", target: "3 series | 10-12 reps", sets: 3, pct: 32, note: "Carga frontal equilibrada", video: "https://www.youtube.com/results?search_query=zancada+frontal+dos+kettlebell" },
+        { name: "Curl de isquios deslizando (Leg Curl Slides)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Ambas piernas simultáneas", video: "https://www.youtube.com/results?search_query=curl+isquios+deslizando+slider" },
+        { name: "Crunches", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Flexión abdominal clásica", video: "https://www.youtube.com/results?search_query=crunches+abdominales+tecnica" }
+      ]
+    };
+
+    // FASE 2 (Extraída de tus imágenes)
+    const phase2WorkoutData = {
+      LUNES: [
+        { name: "Flexión con TRX", target: "3 series | 10-12 reps", sets: 3, pct: 50, note: "Inclinación regulable en TRX", video: "https://www.youtube.com/results?search_query=flexion+trx" },
+        { name: "Remo pendlay", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Explosivo desde el suelo", video: "https://www.youtube.com/results?search_query=remo+pendlay" },
+        { name: "Fondo tríceps", target: "3 series | 10-12 reps", sets: 3, pct: 55, note: "En banco o TRX", video: "https://www.youtube.com/results?search_query=fondo+triceps" },
+        { name: "Curl Scott", target: "3 series | 10-12 reps", sets: 3, pct: 22, note: "En banco Scott con mancuerna", video: "https://www.youtube.com/results?search_query=curl+scott" },
+        { name: "Pájaro con mancuernas", target: "3 series | 10-12 reps", sets: 3, pct: 18, note: "Aislamiento deltoides posterior", video: "https://www.youtube.com/results?search_query=pajaro+con+mancuernas" },
+        { name: "Press Pallof en polea", target: "3 series | 10-12 reps/lado", sets: 3, pct: 15, note: "Núcleo y estabilidad antirotacional", video: "https://www.youtube.com/results?search_query=press+pallof+en+polea" }
+      ],
+      MARTES: [
+        { name: "Sentadilla Búlgara Cuádriceps", target: "3 series | 10-12 reps/pierna", sets: 3, pct: 35, note: "Pie adelantado en banco", video: "https://www.youtube.com/results?search_query=sentadilla+bulgara+cuadriceps" },
+        { name: "Zancada frontal con 2 mancuernas", target: "3 series | 10-12 reps", sets: 3, pct: 32, note: "Carga en ambos lados", video: "https://www.youtube.com/results?search_query=zancada+frontal+con+2+mancuernas" },
+        { name: "Peso muerto piernas rígidas con mancuernas", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Control en bajada y extensión", video: "https://www.youtube.com/results?search_query=peso+muerto+piernas+rigidas+mancuernas" },
+        { name: "Curl de isquios a una pierna (Single Leg Curl Slide)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Unilateral en deslizamiento", video: "https://www.youtube.com/results?search_query=curl+isquios+una+pierna+slide" },
+        { name: "Puente de Glúteo unilateral con KB", target: "3 series | 10-12 reps/pierna", sets: 3, pct: 25, note: "Kettlebell sostenida sobre cadera", video: "https://www.youtube.com/results?search_query=puente+gluteo+unilateral+kb" },
+        { name: "Curl de isquios deslizando (Leg Curl Slides)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Trabajo excéntrico de isquios", video: "https://www.youtube.com/results?search_query=curl+isquios+deslizando" }
+      ],
+      JUEVES: [
+        { name: "Press militar con mancuernas", target: "3 series | 10-12 reps", sets: 3, pct: 40, note: "Sentado o de pie", video: "https://www.youtube.com/results?search_query=press+militar+con+mancuernas" },
+        { name: "Remo en TRX (TRX Row)", target: "3 series | 10-12 reps", sets: 3, pct: 65, note: "Espalda alta y dorsales", video: "https://www.youtube.com/results?search_query=remo+en+trx" },
+        { name: "Tríceps OH mancuerna", target: "3 series | 10-12 reps", sets: 3, pct: 25, note: "Unilateral o bilateral tras nuca", video: "https://www.youtube.com/results?search_query=triceps+oh+mancuerna" },
+        { name: "Bíceps Bilateral Agarre Supino con TRX", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Cuerpo inclinado en TRX", video: "https://www.youtube.com/results?search_query=biceps+bilateral+trx" },
+        { name: "Vuelo bilateral con mancuerna de pie", target: "3 series | 10-12 reps", sets: 3, pct: 18, note: "Elevación lateral de hombro", video: "https://www.youtube.com/results?search_query=vuelo+bilateral+mancuerna" },
+        { name: "Flexiones", target: "3 series | 10-12 reps", sets: 3, pct: 50, note: "Control de tronco y pecho", video: "https://www.youtube.com/results?search_query=flexiones+suelo" }
+      ],
+      VIERNES: [
+        { name: "Sentadilla con KB bilateral", target: "3 series | 10-12 reps", sets: 3, pct: 45, note: "Doble kettlebell al pecho", video: "https://www.youtube.com/results?search_query=sentadilla+kb+bilateral" },
+        { name: "Zancada frontal goblet (Forward Lunge)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Kettlebell central al pecho", video: "https://www.youtube.com/results?search_query=zancada+frontal+goblet" },
+        { name: "Peso muerto rumano", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Bisagra de cadera fluida", video: "https://www.youtube.com/results?search_query=peso+muerto+rumano" },
+        { name: "Monster walking (glúteo medio)", target: "3 series | 10-12 reps/lado", sets: 3, pct: 15, note: "Banda elástica en tobillos/rodillas", video: "https://www.youtube.com/results?search_query=monster+walk+gluteo+medio" },
+        { name: "Plancha abdominal (con disco)", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Tensión sostenida con carga", video: "https://www.youtube.com/results?search_query=plancha+abdominal+disco" },
+        { name: "Crunches", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Enfoque en recto abdominal", video: "https://www.youtube.com/results?search_query=crunches+abdominales" }
+      ]
+    };
+
+    // MESOCICLO 3
     const defaultWorkoutData = {
       LUNES: [
         { name: "Press Banca Plano con Mancuernas", target: "3 series | 8-10 reps", sets: 3, pct: 60, note: "~30% cada mancuerna", video: "https://www.youtube.com/results?search_query=press+banca+mancuernas+tecnica" },
@@ -549,41 +633,62 @@
       ]
     };
 
-    let workoutData = JSON.parse(localStorage.getItem('m3_custom_workout_data')) || defaultWorkoutData;
-    let currentWeek = parseInt(localStorage.getItem('m3_active_week')) || 1;
+    let currentSelection = localStorage.getItem('active_training_selection') || '1';
     let currentDay = "LUNES";
-    let bodyWeight = parseFloat(localStorage.getItem('m3_user_weight')) || 76;
+    let bodyWeight = parseFloat(localStorage.getItem('app_user_weight')) || 76;
 
     document.getElementById('user-weight').value = bodyWeight;
-    document.getElementById('current-week-select').value = currentWeek;
+    document.getElementById('current-week-select').value = currentSelection;
     document.getElementById('m-date').valueAsDate = new Date();
-
-    updateWeekDisplayLabels();
 
     let uploadedPhotos = { front: '', side: '', back: '' };
 
-    function updateWeekDisplayLabels() {
-      document.querySelectorAll('.active-week-num').forEach(el => el.innerText = currentWeek);
+    updateDisplayLabels();
+
+    function getActiveWorkoutData() {
+      if (currentSelection.startsWith('f1')) {
+        return phase1WorkoutData;
+      }
+      if (currentSelection.startsWith('f2')) {
+        return phase2WorkoutData;
+      }
+      return JSON.parse(localStorage.getItem('m3_custom_workout_data')) || defaultWorkoutData;
     }
 
-    function switchWeek(weekNum) {
-      currentWeek = parseInt(weekNum);
-      localStorage.setItem('m3_active_week', currentWeek);
-      updateWeekDisplayLabels();
-      if (workoutData[currentDay]) renderExercises();
+    function updateDisplayLabels() {
+      const selectElem = document.getElementById('current-week-select');
+      const selectedText = selectElem.options[selectElem.selectedIndex].text;
+      document.getElementById('app-title').innerText = selectedText;
+      document.querySelectorAll('.active-week-label').forEach(el => el.innerText = selectedText);
+    }
+
+    function switchWeek(value) {
+      currentSelection = value;
+      localStorage.setItem('active_training_selection', currentSelection);
+      updateDisplayLabels();
+      const currentData = getActiveWorkoutData();
+      if (currentData[currentDay]) renderExercises();
       loadHistory();
     }
 
     function updateBodyWeight(val) {
       bodyWeight = parseFloat(val) || 76;
-      localStorage.setItem('m3_user_weight', bodyWeight);
-      if (workoutData[currentDay]) renderExercises();
+      localStorage.setItem('app_user_weight', bodyWeight);
+      const currentData = getActiveWorkoutData();
+      if (currentData[currentDay]) renderExercises();
     }
 
     function updateExercisePct(exIdx, newPct) {
       const pct = parseFloat(newPct) || 0;
-      workoutData[currentDay][exIdx].pct = pct;
-      localStorage.setItem('m3_custom_workout_data', JSON.stringify(workoutData));
+      if (currentSelection.startsWith('f1')) {
+        phase1WorkoutData[currentDay][exIdx].pct = pct;
+      } else if (currentSelection.startsWith('f2')) {
+        phase2WorkoutData[currentDay][exIdx].pct = pct;
+      } else {
+        let workoutData = JSON.parse(localStorage.getItem('m3_custom_workout_data')) || defaultWorkoutData;
+        workoutData[currentDay][exIdx].pct = pct;
+        localStorage.setItem('m3_custom_workout_data', JSON.stringify(workoutData));
+      }
       renderExercises();
     }
 
@@ -619,9 +724,19 @@
       const listContainer = document.getElementById('exercise-list');
       listContainer.innerHTML = '';
 
-      const mult = weekPctMultipliers[currentWeek] || 1.0;
+      let mult = 1.0;
+      if (currentSelection.startsWith('f1')) {
+        mult = f1Multipliers[currentSelection] || 1.0;
+      } else if (currentSelection.startsWith('f2')) {
+        mult = f2Multipliers[currentSelection] || 1.0;
+      } else {
+        mult = weekPctMultipliers[parseInt(currentSelection)] || 1.0;
+      }
 
-      workoutData[currentDay].forEach((ex, exIdx) => {
+      const currentData = getActiveWorkoutData();
+      if (!currentData[currentDay]) return;
+
+      currentData[currentDay].forEach((ex, exIdx) => {
         const card = document.createElement('div');
         card.className = 'exercise-card';
 
@@ -632,7 +747,7 @@
 
         let rowsHtml = '';
         for (let s = 1; s <= ex.sets; s++) {
-          const keyBase = `m3_w${currentWeek}_${currentDay}_ex${exIdx}_s${s}`;
+          const keyBase = `store_${currentSelection}_${currentDay}_ex${exIdx}_s${s}`;
           const savedKg = localStorage.getItem(`${keyBase}_kg`) || '';
           const savedReps = localStorage.getItem(`${keyBase}_reps`) || '';
           const savedDone = localStorage.getItem(`${keyBase}_done`) === 'true' ? 'checked' : '';
@@ -662,7 +777,7 @@
           </div>
           <div class="exercise-info">Objetivo: ${ex.target}</div>
           <div class="calc-weight-tag">
-            📊 Carga W${currentWeek}: 
+            📊 Carga: 
             <input type="number" step="1" value="${currentPct}" onchange="updateExercisePct(${exIdx}, this.value)">%
             de ${bodyWeight}kg ≈ <strong>${calcTotalKg} kg</strong> ${noteLabel}
           </div>
@@ -679,16 +794,17 @@
     function saveWorkout() {
       const now = new Date();
       const timeStr = `${now.toLocaleDateString()} a las ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-      localStorage.setItem(`m3_last_saved_w${currentWeek}_${currentDay}`, timeStr);
-      alert(`¡Sesión del ${currentDay} (Semana ${currentWeek}) guardada correctamente!`);
+      localStorage.setItem(`last_saved_${currentSelection}_${currentDay}`, timeStr);
+      alert(`¡Sesión del ${currentDay} guardada correctamente!`);
       loadHistory();
     }
 
     function resetCurrentDay() {
-      if (confirm(`¿Quieres borrar los registros del ${currentDay} (Semana ${currentWeek})?`)) {
-        workoutData[currentDay].forEach((ex, exIdx) => {
+      if (confirm(`¿Quieres borrar los registros del ${currentDay}?`)) {
+        const currentData = getActiveWorkoutData();
+        currentData[currentDay].forEach((ex, exIdx) => {
           for (let s = 1; s <= ex.sets; s++) {
-            const keyBase = `m3_w${currentWeek}_${currentDay}_ex${exIdx}_s${s}`;
+            const keyBase = `store_${currentSelection}_${currentDay}_ex${exIdx}_s${s}`;
             localStorage.removeItem(`${keyBase}_kg`);
             localStorage.removeItem(`${keyBase}_reps`);
             localStorage.removeItem(`${keyBase}_done`);
@@ -700,19 +816,22 @@
 
     function loadHistory() {
       const historyContainer = document.getElementById('history-content');
-      const lastSaved = localStorage.getItem(`m3_last_saved_w${currentWeek}_${currentDay}`);
+      const lastSaved = localStorage.getItem(`last_saved_${currentSelection}_${currentDay}`);
 
       if (!lastSaved) {
-        historyContainer.innerHTML = `<em>No hay registros guardados para el ${currentDay} en la Semana ${currentWeek}.</em>`;
+        historyContainer.innerHTML = `<em>No hay registros guardados para el ${currentDay} en esta selección.</em>`;
         return;
       }
 
-      let html = `<div style="margin-bottom: 8px;"><strong>Último guardado (S${currentWeek}):</strong> ${lastSaved}</div>`;
+      let html = `<div style="margin-bottom: 8px;"><strong>Último guardado:</strong> ${lastSaved}</div>`;
 
-      workoutData[currentDay].forEach((ex, exIdx) => {
+      const currentData = getActiveWorkoutData();
+      if (!currentData[currentDay]) return;
+
+      currentData[currentDay].forEach((ex, exIdx) => {
         let setSummary = [];
         for (let s = 1; s <= ex.sets; s++) {
-          const keyBase = `m3_w${currentWeek}_${currentDay}_ex${exIdx}_s${s}`;
+          const keyBase = `store_${currentSelection}_${currentDay}_ex${exIdx}_s${s}`;
           const kg = localStorage.getItem(`${keyBase}_kg`);
           const reps = localStorage.getItem(`${keyBase}_reps`);
           if (kg || reps) {
@@ -745,10 +864,10 @@
       }
     }
 
-    // GESTIÓN DE MÉTRICAS Y FOTOS SEMANALES
+    // GESTIÓN DE MÉTRICAS Y FOTOS
     function saveMetrics() {
       const entry = {
-        week: currentWeek,
+        selection: currentSelection,
         date: document.getElementById('m-date').value || new Date().toISOString().split('T')[0],
         weight: parseFloat(document.getElementById('m-weight').value) || 0,
         cintura: parseFloat(document.getElementById('m-cintura').value) || 0,
@@ -764,23 +883,21 @@
         updateBodyWeight(entry.weight);
       }
 
-      let history = JSON.parse(localStorage.getItem('m3_metrics_history') || '[]');
-      history = history.filter(h => h.week !== currentWeek);
+      let history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
       history.push(entry);
-      history.sort((a, b) => a.week - b.week);
 
-      localStorage.setItem('m3_metrics_history', JSON.stringify(history));
+      localStorage.setItem(`metrics_history_${currentSelection}`, JSON.stringify(history));
 
-      alert(`¡Métricas y fotos de la Semana ${currentWeek} guardadas con éxito!`);
+      alert(`¡Métricas y fotos guardadas con éxito!`);
       switchDay('PROGRESO');
     }
 
     function renderProgressTable() {
       const container = document.getElementById('progress-table-container');
-      const history = JSON.parse(localStorage.getItem('m3_metrics_history') || '[]');
+      const history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
 
       if (history.length === 0) {
-        container.innerHTML = '<p style="font-size:0.85rem; color: var(--text-muted);">No hay registros de métricas aún. Ve a la pestaña de MIÉRCOLES para guardar tus primeras medidas y fotos.</p>';
+        container.innerHTML = '<p style="font-size:0.85rem; color: var(--text-muted);">No hay registros de métricas aún. Ve a la pestaña de MIÉRCOLES para guardar tus medidas y fotos.</p>';
         return;
       }
 
@@ -791,7 +908,7 @@
           <table>
             <thead>
               <tr>
-                <th>Sem.</th>
+                <th>Registro</th>
                 <th>Fecha</th>
                 <th>Peso</th>
                 <th>Cintura</th>
@@ -808,7 +925,7 @@
       history.forEach((h, idx) => {
         tableHtml += `
           <tr>
-            <td><strong>S${h.week}</strong></td>
+            <td><strong>#${idx + 1}</strong></td>
             <td>${h.date}</td>
             <td>${h.weight}k ${getDiffBadge(h.weight, initial.weight, idx)}</td>
             <td>${h.cintura}cm ${getDiffBadge(h.cintura, initial.cintura, idx)}</td>
@@ -832,15 +949,15 @@
 
     function renderProgressPhotos() {
       const container = document.getElementById('progress-photos-container');
-      const history = JSON.parse(localStorage.getItem('m3_metrics_history') || '[]');
+      const history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
 
       let html = '';
-      history.forEach((h) => {
+      history.forEach((h, idx) => {
         if (h.photos && (h.photos.front || h.photos.side || h.photos.back)) {
           html += `
             <div class="progress-photos-card">
               <div style="font-weight:bold; font-size:0.85rem; color:var(--highlight); margin-bottom:8px;">
-                📅 Semana ${h.week} — ${h.date} (${h.weight} kg)
+                📅 Registro #${idx + 1} — ${h.date} (${h.weight} kg)
               </div>
               <div class="photo-preview-grid">
                 ${h.photos.front ? `<img src="${h.photos.front}" alt="Frente">` : ''}
@@ -853,7 +970,7 @@
       });
 
       if (html === '') {
-        container.innerHTML = '<p style="font-size:0.85rem; color: var(--text-muted);">Aún no has adjuntado fotos en tus registros de los miércoles.</p>';
+        container.innerHTML = '<p style="font-size:0.85rem; color: var(--text-muted);">Aún no has adjuntado fotos en tus registros.</p>';
       } else {
         container.innerHTML = html;
       }
@@ -869,8 +986,8 @@
     }
 
     function clearAllMetrics() {
-      if (confirm('¿Quieres eliminar todo el historial de métricas y fotos de las 6 semanas?')) {
-        localStorage.removeItem('m3_metrics_history');
+      if (confirm('¿Quieres eliminar todo el historial de métricas y fotos de esta selección?')) {
+        localStorage.removeItem(`metrics_history_${currentSelection}`);
         renderProgressTable();
         renderProgressPhotos();
       }
