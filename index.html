@@ -6,7 +6,7 @@
   <title>Control de Entrenamiento - Fuerza y Salud</title>
   <link rel="manifest" href="manifest.json">
   
-  <!-- CDN de Chart.js para los gráficos de evolución -->
+  <!-- CDN de Chart.js para los gráficos individuales de evolución -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -125,7 +125,7 @@
       margin: 0 auto;
     }
 
-    .exercise-card, .metrics-card {
+    .exercise-card, .metrics-card, .profile-card {
       background-color: var(--bg-card);
       border-radius: 12px;
       padding: 15px;
@@ -215,7 +215,7 @@
       color: var(--text-muted);
     }
 
-    input[type="number"], input[type="date"] {
+    input[type="number"], input[type="date"], input[type="text"] {
       background-color: var(--bg-primary);
       border: 1px solid var(--border-color);
       color: white;
@@ -226,7 +226,7 @@
     }
 
     input[type="number"] {
-      width: 65px;
+      width: 70px;
     }
 
     input[type="checkbox"] {
@@ -365,18 +365,24 @@
     .diff-down { background: rgba(16, 185, 129, 0.2); color: #10b981; }
     .diff-up { background: rgba(255, 75, 75, 0.2); color: #ff4b4b; }
 
-    .chart-box {
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .chart-card {
       background: var(--bg-primary);
       padding: 12px;
       border-radius: 10px;
       border: 1px solid var(--border-color);
-      margin-bottom: 20px;
     }
 
-    .chart-box h3 {
-      font-size: 0.88rem;
+    .chart-card h4 {
+      font-size: 0.85rem;
       color: var(--highlight);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       text-align: center;
     }
 
@@ -466,7 +472,7 @@
     <div id="metrics-view" style="display: none;">
       <div class="metrics-card">
         <h2 style="font-size: 1.1rem; color: var(--highlight); margin-bottom: 10px;">📏 Registro de Métricas y Fotos (<span class="active-week-label">Semana 1</span>)</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Selecciona la fecha exacta de la toma de medidas (puedes registrar fechas pasadas):</p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Selecciona la fecha exacta (puedes meter registros pasados):</p>
 
         <div class="metric-row">
           <label>Fecha de Registro:</label>
@@ -534,40 +540,70 @@
         </div>
 
         <div class="actions">
-          <button type="button" class="btn btn-save" onclick="saveMetrics()">Guardar Métricas (<span class="active-week-label">Semana 1</span>)</button>
+          <button type="button" class="btn btn-save" onclick="saveMetrics()">Guardar Métricas</button>
         </div>
       </div>
     </div>
 
-    <!-- VISTA DE PROGRESO CON GRÁFICOS Y TABLA -->
+    <!-- VISTA DE PROGRESO: PERFIL + TABLA + GRÁFICAS INDIVIDUALES -->
     <div id="progress-view" style="display: none;">
+      
+      <!-- PERFIL DEL USUARIO (REFERENCIA INICIAL) -->
+      <div class="profile-card">
+        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-bottom: 12px;">👤 Datos Personales & Referencia Inicial</h2>
+        <div class="metric-row">
+          <label>Nombre:</label>
+          <input type="text" id="p-name" placeholder="Tu Nombre">
+        </div>
+        <div class="metric-row">
+          <label>Edad (años):</label>
+          <input type="number" id="p-age" placeholder="Edad">
+        </div>
+        <div class="metric-row">
+          <label>Altura (cm):</label>
+          <input type="number" id="p-height" placeholder="cm">
+        </div>
+        <div class="metric-row">
+          <label>Fecha Inicial:</label>
+          <input type="date" id="p-start-date">
+        </div>
+        <div class="metric-row">
+          <label>Peso Inicial (kg):</label>
+          <input type="number" step="0.1" id="p-start-weight" placeholder="kg">
+        </div>
+        <div class="metric-row">
+          <label>% Grasa Inicial:</label>
+          <input type="number" step="0.1" id="p-start-fat" placeholder="%">
+        </div>
+        <div class="actions" style="margin-top: 12px;">
+          <button type="button" class="btn btn-save" onclick="saveUserProfile()">Guardar Perfil de Referencia</button>
+        </div>
+      </div>
+
+      <!-- EVOLUCIÓN CON GRÁFICAS INDIVIDUALES -->
       <div class="metrics-card">
-        <h2 style="font-size: 1.1rem; color: var(--success); margin-bottom: 15px;">📈 Gráficos de Evolución Corporal</h2>
+        <h2 style="font-size: 1.1rem; color: var(--success); margin-bottom: 10px;">📈 Gráficas Individuales de Evolución</h2>
         
-        <!-- SECCIÓN DE GRÁFICOS INTERACTIVOS -->
-        <div class="chart-box">
-          <h3>Evolución de Peso (kg) y % Grasa</h3>
-          <canvas id="chartWeightFat"></canvas>
+        <div class="charts-grid">
+          <div class="chart-card"><h4>Peso Corporal (kg)</h4><canvas id="chartWeight"></canvas></div>
+          <div class="chart-card"><h4>% Grasa Corporal</h4><canvas id="chartFat"></canvas></div>
+          <div class="chart-card"><h4>Perímetro Cintura (cm)</h4><canvas id="chartCintura"></canvas></div>
+          <div class="chart-card"><h4>Perímetro Abdomen (cm)</h4><canvas id="chartAbdomen"></canvas></div>
+          <div class="chart-card"><h4>Perímetro Cadera (cm)</h4><canvas id="chartCadera"></canvas></div>
+          <div class="chart-card"><h4>Perímetro Pecho (cm)</h4><canvas id="chartPecho"></canvas></div>
+          <div class="chart-card"><h4>Brazo Dominante (cm)</h4><canvas id="chartBrazo"></canvas></div>
+          <div class="chart-card"><h4>Pierna Dominante (cm)</h4><canvas id="chartPierna"></canvas></div>
+          <div class="chart-card"><h4>Gemelo Dominante (cm)</h4><canvas id="chartGemelo"></canvas></div>
         </div>
 
-        <div class="chart-box">
-          <h3>Evolución de Perímetros Tronco (cm)</h3>
-          <canvas id="chartTorso"></canvas>
-        </div>
-
-        <div class="chart-box">
-          <h3>Evolución de Extremidades (cm)</h3>
-          <canvas id="chartLimbs"></canvas>
-        </div>
-
-        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-top: 25px; margin-bottom: 10px;">📊 Tabla de Datos Históricos</h2>
+        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-top: 25px; margin-bottom: 10px;">📊 Tabla Comparativa de Datos</h2>
         <div id="progress-table-container">Cargando datos...</div>
         
         <h2 style="font-size: 1.1rem; color: var(--highlight); margin-top: 25px; margin-bottom: 10px;">📷 Galería de Fotos</h2>
         <div id="progress-photos-container">No hay fotos guardadas aún.</div>
 
         <div class="actions" style="margin-top: 20px;">
-          <button type="button" class="btn btn-reset" onclick="clearAllMetrics()">Borrar Historial de este Bloque</button>
+          <button type="button" class="btn btn-reset" onclick="clearAllMetrics()">Borrar Historial Completo</button>
         </div>
       </div>
     </div>
@@ -575,13 +611,11 @@
   </div>
 
   <script>
-    // Multiplicadores de progresión
     const weekPctMultipliers = { 1: 1.0, 2: 1.03, 3: 1.06, 4: 1.10, 5: 1.13, 6: 0.90 };
     const f1Multipliers = { 'f1_s1': 1.0, 'f1_s2': 1.03, 'f1_s3': 1.06, 'f1_s4': 1.10 };
     const f2Multipliers = { 'f2_s1': 1.0, 'f2_s2': 1.03, 'f2_s3': 1.06, 'f2_s4': 1.10 };
     const f4Multipliers = { 'f4_s1': 1.0, 'f4_s2': 1.025, 'f4_s3': 1.05, 'f4_s4': 1.08 };
 
-    // FASE 1
     const phase1WorkoutData = {
       LUNES: [
         { name: "Flexiones", target: "3 series | 10-12 reps", sets: 3, pct: 50, note: "Peso corporal / Autocarga", video: "https://www.youtube.com/results?search_query=flexiones+tecnica" },
@@ -614,7 +648,6 @@
       ]
     };
 
-    // FASE 2
     const phase2WorkoutData = {
       LUNES: [
         { name: "Flexión con TRX", target: "3 series | 10-12 reps", sets: 3, pct: 50, note: "Inclinación regulable en TRX", video: "https://www.youtube.com/results?search_query=flexion+trx" },
@@ -642,15 +675,14 @@
       ],
       VIERNES: [
         { name: "Sentadilla con KB bilateral", target: "3 series | 10-12 reps", sets: 3, pct: 45, note: "Doble kettlebell al pecho", video: "https://www.youtube.com/results?search_query=sentadilla+kb+bilateral" },
-        { name: "Zancada frontal goblet (Forward Lunge)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Kettlebell central al pecho", video: "https://www.youtube.com/results?search_query=zancada+frontal+goblet" },
+        { name: "Zancada frontal goblet (Forward Lunge)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Kettlebell central al pecho", video: "https://www.youtube.com/results?search_query=sentadilla+kb+bilateral" },
         { name: "Peso muerto rumano", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Bisagra de cadera fluida", video: "https://www.youtube.com/results?search_query=peso+muerto+rumano" },
         { name: "Monster walking (glúteo medio)", target: "3 series | 10-12 reps/lado", sets: 3, pct: 15, note: "Banda elástica en tobillos/rodillas", video: "https://www.youtube.com/results?search_query=monster+walk+gluteo+medio" },
-        { name: "Plancha abdominal (con disco)", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Tensión sostenida con carga", video: "https://www.youtube.com/results?search_query=plancha+abdominal+disco" },
+        { name: "Plancha abdominal (con disco)", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Tensión sustained con carga", video: "https://www.youtube.com/results?search_query=plancha+abdominal+disco" },
         { name: "Crunches", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Enfoque en recto abdominal", video: "https://www.youtube.com/results?search_query=crunches+abdominales" }
       ]
     };
 
-    // FASE 4
     const phase4WorkoutData = {
       LUNES: [
         { name: "Press Banca Inclinado con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 48, note: "Control excéntrico 3 seg", video: "https://www.youtube.com/results?search_query=press+inclinado+mancuernas" },
@@ -685,7 +717,6 @@
       ]
     };
 
-    // MESOCICLO 3
     const defaultWorkoutData = {
       LUNES: [
         { name: "Press Banca Plano con Mancuernas", target: "3 series | 8-10 reps", sets: 3, pct: 60, note: "~30% cada mancuerna", video: "https://www.youtube.com/results?search_query=press+banca+mancuernas+tecnica" },
@@ -729,11 +760,10 @@
     document.getElementById('m-date').valueAsDate = new Date();
 
     let uploadedPhotos = { front: '', side: '', back: '' };
-
-    // Variables globales para instancias de gráficos
-    let chart1 = null, chart2 = null, chart3 = null;
+    let chartInstances = {};
 
     updateDisplayLabels();
+    loadUserProfile();
 
     function getActiveWorkoutData() {
       if (currentSelection.startsWith('f1')) return phase1WorkoutData;
@@ -767,13 +797,10 @@
 
     function updateExercisePct(exIdx, newPct) {
       const pct = parseFloat(newPct) || 0;
-      if (currentSelection.startsWith('f1')) {
-        phase1WorkoutData[currentDay][exIdx].pct = pct;
-      } else if (currentSelection.startsWith('f2')) {
-        phase2WorkoutData[currentDay][exIdx].pct = pct;
-      } else if (currentSelection.startsWith('f4')) {
-        phase4WorkoutData[currentDay][exIdx].pct = pct;
-      } else {
+      if (currentSelection.startsWith('f1')) phase1WorkoutData[currentDay][exIdx].pct = pct;
+      else if (currentSelection.startsWith('f2')) phase2WorkoutData[currentDay][exIdx].pct = pct;
+      else if (currentSelection.startsWith('f4')) phase4WorkoutData[currentDay][exIdx].pct = pct;
+      else {
         let workoutData = JSON.parse(localStorage.getItem('m3_custom_workout_data')) || defaultWorkoutData;
         workoutData[currentDay][exIdx].pct = pct;
         localStorage.setItem('m3_custom_workout_data', JSON.stringify(workoutData));
@@ -801,7 +828,7 @@
       } else if (day === 'PROGRESO') {
         progressView.style.display = 'block';
         renderProgressTable();
-        renderCharts();
+        renderIndividualCharts();
         renderProgressPhotos();
       } else {
         workoutView.style.display = 'block';
@@ -933,7 +960,6 @@
       historyContainer.innerHTML = html;
     }
 
-    // PREVISUALIZACIÓN DE FOTOS
     function previewPhoto(input, targetImgId) {
       const file = input.files[0];
       if (file) {
@@ -951,13 +977,40 @@
       }
     }
 
-    // GESTIÓN Y ALMACENAMIENTO DE MÉTRICAS (ORDENADAS POR FECHA)
+    // GESTIÓN DEL PERFIL DE USUARIO Y REFERENCIA INICIAL
+    function saveUserProfile() {
+      const profile = {
+        name: document.getElementById('p-name').value || '',
+        age: parseInt(document.getElementById('p-age').value) || 0,
+        height: parseInt(document.getElementById('p-height').value) || 0,
+        startDate: document.getElementById('p-start-date').value || new Date().toISOString().split('T')[0],
+        startWeight: parseFloat(document.getElementById('p-start-weight').value) || 0,
+        startFat: parseFloat(document.getElementById('p-start-fat').value) || 0
+      };
+
+      localStorage.setItem('app_user_profile', JSON.stringify(profile));
+      if (profile.startWeight > 0) updateBodyWeight(profile.startWeight);
+
+      alert('¡Perfil de usuario y referencia inicial guardados correctamente!');
+      renderProgressTable();
+      renderIndividualCharts();
+    }
+
+    function loadUserProfile() {
+      const profile = JSON.parse(localStorage.getItem('app_user_profile') || '{}');
+      if (profile.name) document.getElementById('p-name').value = profile.name;
+      if (profile.age) document.getElementById('p-age').value = profile.age;
+      if (profile.height) document.getElementById('p-height').value = profile.height;
+      if (profile.startDate) document.getElementById('p-start-date').value = profile.startDate;
+      if (profile.startWeight) document.getElementById('p-start-weight').value = profile.startWeight;
+      if (profile.startFat) document.getElementById('p-start-fat').value = profile.startFat;
+    }
+
+    // GESTIÓN Y ALMACENAMIENTO DE MÉTRICAS (ORDENADAS Y PERSISTENTES POR FECHA)
     function saveMetrics() {
       const dateVal = document.getElementById('m-date').value || new Date().toISOString().split('T')[0];
 
       const entry = {
-        id: dateVal,
-        selection: currentSelection,
         date: dateVal,
         weight: parseFloat(document.getElementById('m-weight').value) || 0,
         fat: parseFloat(document.getElementById('m-fat').value) || 0,
@@ -973,31 +1026,34 @@
 
       if (entry.weight > 0) updateBodyWeight(entry.weight);
 
-      let history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
+      let history = JSON.parse(localStorage.getItem('global_metrics_history') || '[]');
       
-      // Reemplaza si ya existe registro en la misma fecha, o añade uno nuevo
+      // Elimina la entrada antigua si se está reescribiendo la misma fecha
       history = history.filter(h => h.date !== dateVal);
       history.push(entry);
 
-      // Ordenar cromológicamente de más antiguo a más reciente
+      // Ordenar por fecha cronológica (de la más antigua a la más reciente)
       history.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-      localStorage.setItem(`metrics_history_${currentSelection}`, JSON.stringify(history));
+      localStorage.setItem('global_metrics_history', JSON.stringify(history));
 
-      alert(`¡Métricas del fecha ${dateVal} guardadas correctamente!`);
+      alert(`¡Métricas y fotos del ${dateVal} guardadas correctamente!`);
       switchDay('PROGRESO');
     }
 
     function renderProgressTable() {
       const container = document.getElementById('progress-table-container');
-      const history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
+      const history = JSON.parse(localStorage.getItem('global_metrics_history') || '[]');
+      const profile = JSON.parse(localStorage.getItem('app_user_profile') || '{}');
 
       if (history.length === 0) {
         container.innerHTML = '<p style="font-size:0.85rem; color: var(--text-muted);">No hay registros de métricas aún. Ve a la pestaña de MIÉRCOLES para guardar tus medidas y fotos.</p>';
         return;
       }
 
-      const initial = history[0];
+      // Toma la primera referencia del Perfil o el primer registro
+      const baseWeight = profile.startWeight || history[0].weight;
+      const baseFat = profile.startFat || history[0].fat;
 
       let tableHtml = `
         <div style="overflow-x:auto;">
@@ -1025,15 +1081,15 @@
           <tr>
             <td><strong>#${idx + 1}</strong></td>
             <td>${h.date}</td>
-            <td>${h.weight}k ${getDiffBadge(h.weight, initial.weight, idx)}</td>
-            <td>${h.fat ? h.fat + '%' : '-'} ${getDiffBadge(h.fat, initial.fat, idx)}</td>
-            <td>${h.cintura}cm ${getDiffBadge(h.cintura, initial.cintura, idx)}</td>
-            <td>${h.abdomen}cm ${getDiffBadge(h.abdomen, initial.abdomen, idx)}</td>
-            <td>${h.cadera}cm ${getDiffBadge(h.cadera, initial.cadera, idx)}</td>
-            <td>${h.pecho}cm ${getDiffBadge(h.pecho, initial.pecho, idx)}</td>
-            <td>${h.brazo}cm ${getDiffBadge(h.brazo, initial.brazo, idx)}</td>
-            <td>${h.pierna}cm ${getDiffBadge(h.pierna, initial.pierna, idx)}</td>
-            <td>${h.gemelo ? h.gemelo + 'cm' : '-'} ${getDiffBadge(h.gemelo, initial.gemelo, idx)}</td>
+            <td>${h.weight}k ${getDiffBadge(h.weight, baseWeight)}</td>
+            <td>${h.fat ? h.fat + '%' : '-'} ${getDiffBadge(h.fat, baseFat)}</td>
+            <td>${h.cintura}cm</td>
+            <td>${h.abdomen}cm</td>
+            <td>${h.cadera}cm</td>
+            <td>${h.pecho}cm</td>
+            <td>${h.brazo}cm</td>
+            <td>${h.pierna}cm</td>
+            <td>${h.gemelo ? h.gemelo + 'cm' : '-'}</td>
           </tr>
         `;
       });
@@ -1047,82 +1103,63 @@
       container.innerHTML = tableHtml;
     }
 
-    // GENERACIÓN DE GRÁFICOS INTERACTIVOS (CHART.JS)
-    function renderCharts() {
-      const history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
+    // GRÁFICAS INDIVIDUALES POR CATEGORÍA CON CHART.JS
+    function renderIndividualCharts() {
+      const history = JSON.parse(localStorage.getItem('global_metrics_history') || '[]');
       if (history.length === 0) return;
 
       const labels = history.map(h => h.date);
 
-      // Destruir gráficos anteriores si existen
-      if (chart1) chart1.destroy();
-      if (chart2) chart2.destroy();
-      if (chart3) chart3.destroy();
+      const metricsList = [
+        { id: 'chartWeight', label: 'Peso (kg)', key: 'weight', color: '#10b981' },
+        { id: 'chartFat', label: '% Grasa Corporal', key: 'fat', color: '#ff4b4b' },
+        { id: 'chartCintura', label: 'Cintura (cm)', key: 'cintura', color: '#38bdf8' },
+        { id: 'chartAbdomen', label: 'Abdomen (cm)', key: 'abdomen', color: '#f59e0b' },
+        { id: 'chartCadera', label: 'Cadera (cm)', key: 'cadera', color: '#a855f7' },
+        { id: 'chartPecho', label: 'Pecho (cm)', key: 'pecho', color: '#ec4899' },
+        { id: 'chartBrazo', label: 'Brazo (cm)', key: 'brazo', color: '#6366f1' },
+        { id: 'chartPierna', label: 'Pierna (cm)', key: 'pierna', color: '#14b8a6' },
+        { id: 'chartGemelo', label: 'Gemelo (cm)', key: 'gemelo', color: '#e11d48' }
+      ];
 
-      // 1. Gráfico de Peso y % Grasa
-      const ctx1 = document.getElementById('chartWeightFat').getContext('2d');
-      chart1 = new Chart(ctx1, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Peso (kg)', data: history.map(h => h.weight), borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', tension: 0.2, yAxisID: 'y' },
-            { label: '% Grasa', data: history.map(h => h.fat), borderColor: '#ff4b4b', backgroundColor: 'rgba(255, 75, 75, 0.1)', tension: 0.2, yAxisID: 'y1' }
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            x: { ticks: { color: '#94a3b8' } },
-            y: { type: 'linear', display: true, position: 'left', ticks: { color: '#10b981' } },
-            y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#ff4b4b' } }
+      metricsList.forEach(m => {
+        if (chartInstances[m.id]) {
+          chartInstances[m.id].destroy();
+        }
+
+        const ctx = document.getElementById(m.id).getContext('2d');
+        chartInstances[m.id] = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: m.label,
+              data: history.map(h => h[m.key] || 0),
+              borderColor: m.color,
+              backgroundColor: m.color + '22',
+              fill: true,
+              tension: 0.2,
+              pointRadius: 4,
+              pointBackgroundColor: m.color
+            }]
           },
-          plugins: { legend: { labels: { color: '#f0f4f8' } } }
-        }
-      });
-
-      // 2. Gráfico de Perímetros Tronco
-      const ctx2 = document.getElementById('chartTorso').getContext('2d');
-      chart2 = new Chart(ctx2, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Cintura (cm)', data: history.map(h => h.cintura), borderColor: '#38bdf8', tension: 0.2 },
-            { label: 'Abdomen (cm)', data: history.map(h => h.abdomen), borderColor: '#f59e0b', tension: 0.2 },
-            { label: 'Pecho (cm)', data: history.map(h => h.pecho), borderColor: '#a855f7', tension: 0.2 }
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } },
-          plugins: { legend: { labels: { color: '#f0f4f8' } } }
-        }
-      });
-
-      // 3. Gráfico de Extremidades
-      const ctx3 = document.getElementById('chartLimbs').getContext('2d');
-      chart3 = new Chart(ctx3, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Brazo (cm)', data: history.map(h => h.brazo), borderColor: '#ec4899', tension: 0.2 },
-            { label: 'Pierna (cm)', data: history.map(h => h.pierna), borderColor: '#6366f1', tension: 0.2 },
-            { label: 'Gemelo (cm)', data: history.map(h => h.gemelo), borderColor: '#14b8a6', tension: 0.2 }
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } },
-          plugins: { legend: { labels: { color: '#f0f4f8' } } }
-        }
+          options: {
+            responsive: true,
+            scales: {
+              x: { ticks: { color: '#94a3b8', font: { size: 10 } } },
+              y: { ticks: { color: '#94a3b8', font: { size: 10 } } }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
       });
     }
 
     function renderProgressPhotos() {
       const container = document.getElementById('progress-photos-container');
-      const history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
+      const history = JSON.parse(localStorage.getItem('global_metrics_history') || '[]');
 
       let html = '';
       history.forEach((h, idx) => {
@@ -1149,8 +1186,8 @@
       }
     }
 
-    function getDiffBadge(current, first, idx) {
-      if (idx === 0 || !first || !current) return '';
+    function getDiffBadge(current, first) {
+      if (!first || !current) return '';
       const diff = Math.round((current - first) * 10) / 10;
       if (diff === 0) return '';
       const cls = diff < 0 ? 'diff-down' : 'diff-up';
@@ -1159,10 +1196,11 @@
     }
 
     function clearAllMetrics() {
-      if (confirm('¿Quieres eliminar todo el historial de métricas y fotos de esta selección?')) {
-        localStorage.removeItem(`metrics_history_${currentSelection}`);
+      if (confirm('¿Quieres eliminar todo el historial de métricas, perfil y fotos?')) {
+        localStorage.removeItem('global_metrics_history');
+        localStorage.removeItem('app_user_profile');
         renderProgressTable();
-        renderCharts();
+        renderIndividualCharts();
         renderProgressPhotos();
       }
     }
