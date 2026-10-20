@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Control de Entrenamiento - Fuerza y Salud</title>
   <link rel="manifest" href="manifest.json">
+  
+  <!-- CDN de Chart.js para los gráficos de evolución -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     :root {
       --bg-primary: #121824;
@@ -361,6 +365,21 @@
     .diff-down { background: rgba(16, 185, 129, 0.2); color: #10b981; }
     .diff-up { background: rgba(255, 75, 75, 0.2); color: #ff4b4b; }
 
+    .chart-box {
+      background: var(--bg-primary);
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .chart-box h3 {
+      font-size: 0.88rem;
+      color: var(--highlight);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
     .progress-photos-card {
       background: var(--bg-primary);
       padding: 10px;
@@ -447,7 +466,7 @@
     <div id="metrics-view" style="display: none;">
       <div class="metrics-card">
         <h2 style="font-size: 1.1rem; color: var(--highlight); margin-bottom: 10px;">📏 Registro de Métricas y Fotos (<span class="active-week-label">Semana 1</span>)</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Día de descanso activo: Toma tus medidas y fotos por la mañana en ayunas.</p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Selecciona la fecha exacta de la toma de medidas (puedes registrar fechas pasadas):</p>
 
         <div class="metric-row">
           <label>Fecha de Registro:</label>
@@ -520,10 +539,28 @@
       </div>
     </div>
 
-    <!-- VISTA DE PROGRESO -->
+    <!-- VISTA DE PROGRESO CON GRÁFICOS Y TABLA -->
     <div id="progress-view" style="display: none;">
       <div class="metrics-card">
-        <h2 style="font-size: 1.1rem; color: var(--success); margin-bottom: 10px;">📊 Evolución del Bloque</h2>
+        <h2 style="font-size: 1.1rem; color: var(--success); margin-bottom: 15px;">📈 Gráficos de Evolución Corporal</h2>
+        
+        <!-- SECCIÓN DE GRÁFICOS INTERACTIVOS -->
+        <div class="chart-box">
+          <h3>Evolución de Peso (kg) y % Grasa</h3>
+          <canvas id="chartWeightFat"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h3>Evolución de Perímetros Tronco (cm)</h3>
+          <canvas id="chartTorso"></canvas>
+        </div>
+
+        <div class="chart-box">
+          <h3>Evolución de Extremidades (cm)</h3>
+          <canvas id="chartLimbs"></canvas>
+        </div>
+
+        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-top: 25px; margin-bottom: 10px;">📊 Tabla de Datos Históricos</h2>
         <div id="progress-table-container">Cargando datos...</div>
         
         <h2 style="font-size: 1.1rem; color: var(--highlight); margin-top: 25px; margin-bottom: 10px;">📷 Galería de Fotos</h2>
@@ -613,7 +650,7 @@
       ]
     };
 
-    // FASE 4 (Definición Muscular & Pérdida de Grasa)
+    // FASE 4
     const phase4WorkoutData = {
       LUNES: [
         { name: "Press Banca Inclinado con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 48, note: "Control excéntrico 3 seg", video: "https://www.youtube.com/results?search_query=press+inclinado+mancuernas" },
@@ -693,18 +730,15 @@
 
     let uploadedPhotos = { front: '', side: '', back: '' };
 
+    // Variables globales para instancias de gráficos
+    let chart1 = null, chart2 = null, chart3 = null;
+
     updateDisplayLabels();
 
     function getActiveWorkoutData() {
-      if (currentSelection.startsWith('f1')) {
-        return phase1WorkoutData;
-      }
-      if (currentSelection.startsWith('f2')) {
-        return phase2WorkoutData;
-      }
-      if (currentSelection.startsWith('f4')) {
-        return phase4WorkoutData;
-      }
+      if (currentSelection.startsWith('f1')) return phase1WorkoutData;
+      if (currentSelection.startsWith('f2')) return phase2WorkoutData;
+      if (currentSelection.startsWith('f4')) return phase4WorkoutData;
       return JSON.parse(localStorage.getItem('m3_custom_workout_data')) || defaultWorkoutData;
     }
 
@@ -767,6 +801,7 @@
       } else if (day === 'PROGRESO') {
         progressView.style.display = 'block';
         renderProgressTable();
+        renderCharts();
         renderProgressPhotos();
       } else {
         workoutView.style.display = 'block';
@@ -780,15 +815,10 @@
       listContainer.innerHTML = '';
 
       let mult = 1.0;
-      if (currentSelection.startsWith('f1')) {
-        mult = f1Multipliers[currentSelection] || 1.0;
-      } else if (currentSelection.startsWith('f2')) {
-        mult = f2Multipliers[currentSelection] || 1.0;
-      } else if (currentSelection.startsWith('f4')) {
-        mult = f4Multipliers[currentSelection] || 1.0;
-      } else {
-        mult = weekPctMultipliers[parseInt(currentSelection)] || 1.0;
-      }
+      if (currentSelection.startsWith('f1')) mult = f1Multipliers[currentSelection] || 1.0;
+      else if (currentSelection.startsWith('f2')) mult = f2Multipliers[currentSelection] || 1.0;
+      else if (currentSelection.startsWith('f4')) mult = f4Multipliers[currentSelection] || 1.0;
+      else mult = weekPctMultipliers[parseInt(currentSelection)] || 1.0;
 
       const currentData = getActiveWorkoutData();
       if (!currentData[currentDay]) return;
@@ -921,11 +951,14 @@
       }
     }
 
-    // GESTIÓN DE MÉTRICAS Y FOTOS
+    // GESTIÓN Y ALMACENAMIENTO DE MÉTRICAS (ORDENADAS POR FECHA)
     function saveMetrics() {
+      const dateVal = document.getElementById('m-date').value || new Date().toISOString().split('T')[0];
+
       const entry = {
+        id: dateVal,
         selection: currentSelection,
-        date: document.getElementById('m-date').value || new Date().toISOString().split('T')[0],
+        date: dateVal,
         weight: parseFloat(document.getElementById('m-weight').value) || 0,
         fat: parseFloat(document.getElementById('m-fat').value) || 0,
         cintura: parseFloat(document.getElementById('m-cintura').value) || 0,
@@ -938,16 +971,20 @@
         photos: { ...uploadedPhotos }
       };
 
-      if (entry.weight > 0) {
-        updateBodyWeight(entry.weight);
-      }
+      if (entry.weight > 0) updateBodyWeight(entry.weight);
 
       let history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
+      
+      // Reemplaza si ya existe registro en la misma fecha, o añade uno nuevo
+      history = history.filter(h => h.date !== dateVal);
       history.push(entry);
+
+      // Ordenar cromológicamente de más antiguo a más reciente
+      history.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       localStorage.setItem(`metrics_history_${currentSelection}`, JSON.stringify(history));
 
-      alert(`¡Métricas y fotos guardadas con éxito!`);
+      alert(`¡Métricas del fecha ${dateVal} guardadas correctamente!`);
       switchDay('PROGRESO');
     }
 
@@ -967,7 +1004,7 @@
           <table>
             <thead>
               <tr>
-                <th>Registro</th>
+                <th>Nº</th>
                 <th>Fecha</th>
                 <th>Peso</th>
                 <th>% Grasa</th>
@@ -1008,6 +1045,79 @@
       `;
 
       container.innerHTML = tableHtml;
+    }
+
+    // GENERACIÓN DE GRÁFICOS INTERACTIVOS (CHART.JS)
+    function renderCharts() {
+      const history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
+      if (history.length === 0) return;
+
+      const labels = history.map(h => h.date);
+
+      // Destruir gráficos anteriores si existen
+      if (chart1) chart1.destroy();
+      if (chart2) chart2.destroy();
+      if (chart3) chart3.destroy();
+
+      // 1. Gráfico de Peso y % Grasa
+      const ctx1 = document.getElementById('chartWeightFat').getContext('2d');
+      chart1 = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Peso (kg)', data: history.map(h => h.weight), borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', tension: 0.2, yAxisID: 'y' },
+            { label: '% Grasa', data: history.map(h => h.fat), borderColor: '#ff4b4b', backgroundColor: 'rgba(255, 75, 75, 0.1)', tension: 0.2, yAxisID: 'y1' }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: { ticks: { color: '#94a3b8' } },
+            y: { type: 'linear', display: true, position: 'left', ticks: { color: '#10b981' } },
+            y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#ff4b4b' } }
+          },
+          plugins: { legend: { labels: { color: '#f0f4f8' } } }
+        }
+      });
+
+      // 2. Gráfico de Perímetros Tronco
+      const ctx2 = document.getElementById('chartTorso').getContext('2d');
+      chart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Cintura (cm)', data: history.map(h => h.cintura), borderColor: '#38bdf8', tension: 0.2 },
+            { label: 'Abdomen (cm)', data: history.map(h => h.abdomen), borderColor: '#f59e0b', tension: 0.2 },
+            { label: 'Pecho (cm)', data: history.map(h => h.pecho), borderColor: '#a855f7', tension: 0.2 }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } },
+          plugins: { legend: { labels: { color: '#f0f4f8' } } }
+        }
+      });
+
+      // 3. Gráfico de Extremidades
+      const ctx3 = document.getElementById('chartLimbs').getContext('2d');
+      chart3 = new Chart(ctx3, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Brazo (cm)', data: history.map(h => h.brazo), borderColor: '#ec4899', tension: 0.2 },
+            { label: 'Pierna (cm)', data: history.map(h => h.pierna), borderColor: '#6366f1', tension: 0.2 },
+            { label: 'Gemelo (cm)', data: history.map(h => h.gemelo), borderColor: '#14b8a6', tension: 0.2 }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } },
+          plugins: { legend: { labels: { color: '#f0f4f8' } } }
+        }
+      });
     }
 
     function renderProgressPhotos() {
@@ -1052,6 +1162,7 @@
       if (confirm('¿Quieres eliminar todo el historial de métricas y fotos de esta selección?')) {
         localStorage.removeItem(`metrics_history_${currentSelection}`);
         renderProgressTable();
+        renderCharts();
         renderProgressPhotos();
       }
     }
