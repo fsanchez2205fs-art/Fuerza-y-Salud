@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Control de Entrenamiento - Fuerza y Salud</title>
+  <title>Control de Entrenamiento, Nutrición y Recetas - Fuerza y Salud</title>
   <link rel="manifest" href="manifest.json">
   
   <!-- CDN de Chart.js para los gráficos individuales de evolución -->
@@ -52,7 +52,14 @@
       font-size: 1.1rem;
       text-transform: uppercase;
       letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    header .welcome-subtitle {
+      font-size: 0.82rem;
+      color: var(--highlight);
       margin-bottom: 8px;
+      font-weight: 600;
     }
 
     .top-controls {
@@ -125,7 +132,7 @@
       margin: 0 auto;
     }
 
-    .exercise-card, .metrics-card, .profile-card {
+    .exercise-card, .metrics-card, .profile-card, .nutrition-card, .recipe-card, .material-card {
       background-color: var(--bg-card);
       border-radius: 12px;
       padding: 15px;
@@ -393,12 +400,118 @@
       margin-top: 15px;
       border: 1px solid var(--border-color);
     }
+
+    /* Estilos de Nutrición */
+    .menu-day-title {
+      color: var(--week-active);
+      font-size: 0.95rem;
+      font-weight: bold;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 4px;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+    .meal-box {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+    }
+    .meal-name {
+      color: var(--highlight);
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+    .grocery-category {
+      color: var(--success);
+      font-weight: bold;
+      font-size: 0.88rem;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+    .grocery-list {
+      list-style-type: square;
+      padding-left: 20px;
+      font-size: 0.8rem;
+      color: var(--text-main);
+    }
+    .grocery-list li {
+      margin-bottom: 3px;
+    }
+
+    /* Estilos específicos de Recetas */
+    .recipe-title {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--highlight);
+      margin-bottom: 6px;
+    }
+    .recipe-steps {
+      font-size: 0.8rem;
+      color: var(--text-main);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+    .recipe-steps ol {
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+    .recipe-steps li {
+      margin-bottom: 4px;
+    }
+    .recipe-tag {
+      font-size: 0.72rem;
+      background: var(--info-bg);
+      color: var(--highlight);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    /* Estilos para Pestaña de Materiales */
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .material-item {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .material-img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border: 1px solid var(--border-color);
+    }
+    .material-name {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 4px;
+    }
+    .material-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <h1 id="app-title">Mesociclo 3 (6 Semanas)</h1>
+    <h1 id="welcome-title">Bienvenido, Tareas de esta semana</h1>
+    <div id="app-title" class="welcome-subtitle">Mesociclo 3 (6 Semanas)</div>
     <div class="top-controls">
       <div class="week-selector-box">
         <span>Fase / Semana:</span>
@@ -446,6 +559,9 @@
     <button class="day-btn" onclick="switchDay('MIERCOLES')">MIÉRCOLES 📏</button>
     <button class="day-btn" onclick="switchDay('JUEVES')">JUEVES</button>
     <button class="day-btn" onclick="switchDay('VIERNES')">VIERNES</button>
+    <button class="day-btn" onclick="switchDay('MATERIALES')">MATERIALES 🏋️‍♂️</button>
+    <button class="day-btn" onclick="switchDay('NUTRICION')">NUTRICIÓN 🥗</button>
+    <button class="day-btn" onclick="switchDay('RECETAS')">RECETAS 👨‍🍳</button>
     <button class="day-btn" onclick="switchDay('PROGRESO')">PROGRESO 📊</button>
   </div>
 
@@ -472,11 +588,11 @@
     <div id="metrics-view" style="display: none;">
       <div class="metrics-card">
         <h2 style="font-size: 1.1rem; color: var(--highlight); margin-bottom: 10px;">📏 Registro de Métricas y Fotos (<span class="active-week-label">Semana 1</span>)</h2>
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Selecciona la fecha exacta (puedes meter registros pasados):</p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Selecciona la fecha exacta (puedes registrar fechas pasadas):</p>
 
         <div class="metric-row">
           <label>Fecha de Registro:</label>
-          <input type="date" id="m-date">
+          <input type="date" id="m-date" onchange="onDateChange(this.value)">
         </div>
         <div class="metric-row">
           <label>Peso Corporal (kg):</label>
@@ -545,6 +661,53 @@
       </div>
     </div>
 
+    <!-- VISTA DE MATERIALES Y EQUIPAMIENTO -->
+    <div id="materials-view" style="display: none;">
+      <div class="material-card">
+        <h2 style="font-size: 1.1rem; color: var(--highlight); margin-bottom: 4px;">🏋️ Equipamiento Requerido</h2>
+        <div style="font-size: 0.85rem; color: var(--week-active); font-weight: bold; margin-bottom: 10px;" id="materials-phase-title">
+          Materiales para la Fase Seleccionada
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">
+          A continuación se muestra el material específico necesario para realizar correctamente los ejercicios programados en este bloque de entrenamiento:
+        </p>
+
+        <div id="materials-list-container" class="materials-grid"></div>
+      </div>
+    </div>
+
+    <!-- VISTA DE NUTRICIÓN (MENÚ + LISTA DE LA COMPRA) -->
+    <div id="nutrition-view" style="display: none;">
+      <div class="nutrition-card">
+        <h2 style="font-size: 1.1rem; color: var(--success); margin-bottom: 8px;">🥗 Plan Nutricional & Lista de la Compra</h2>
+        <div style="font-size: 0.85rem; color: var(--highlight); font-weight: bold; margin-bottom: 12px;" id="nutrition-phase-title">
+          Nutrición Adaptada a la Fase Activa
+        </div>
+
+        <!-- Pestañas internas de Nutrición: Menú vs Lista -->
+        <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+          <button type="button" class="day-btn active" id="btn-nut-menu" onclick="toggleNutritionSubTab('menu')">📅 Menú Semanal</button>
+          <button type="button" class="day-btn" id="btn-nut-grocery" onclick="toggleNutritionSubTab('grocery')">🛒 Lista de la Compra</button>
+        </div>
+
+        <!-- CONTENIDO DEL MENÚ SEMANAL -->
+        <div id="nut-menu-content"></div>
+
+        <!-- CONTENIDO DE LA LISTA DE LA COMPRA -->
+        <div id="nut-grocery-content" style="display: none;"></div>
+      </div>
+    </div>
+
+    <!-- VISTA DE RECETAS PASO A PASO CON VÍDEOS -->
+    <div id="recipes-view" style="display: none;">
+      <div class="nutrition-card">
+        <h2 style="font-size: 1.1rem; color: var(--week-active); margin-bottom: 6px;">👨‍Chef & Recetario Saludable</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Recetas fáciles adaptadas a las comidas de tus menús semanales con tutoriales en vídeo.</p>
+
+        <div id="recipes-list-container"></div>
+      </div>
+    </div>
+
     <!-- VISTA DE PROGRESO: PERFIL + TABLA + GRÁFICAS INDIVIDUALES -->
     <div id="progress-view" style="display: none;">
       
@@ -552,7 +715,7 @@
       <div class="profile-card">
         <h2 style="font-size: 1.1rem; color: var(--highlight); margin-bottom: 12px;">👤 Datos Personales & Referencia Inicial</h2>
         <div class="metric-row">
-          <label>Nombre:</label>
+          <label>Nombre Completo:</label>
           <input type="text" id="p-name" placeholder="Tu Nombre">
         </div>
         <div class="metric-row">
@@ -616,6 +779,7 @@
     const f2Multipliers = { 'f2_s1': 1.0, 'f2_s2': 1.03, 'f2_s3': 1.06, 'f2_s4': 1.10 };
     const f4Multipliers = { 'f4_s1': 1.0, 'f4_s2': 1.025, 'f4_s3': 1.05, 'f4_s4': 1.08 };
 
+    // FASE 1
     const phase1WorkoutData = {
       LUNES: [
         { name: "Flexiones", target: "3 series | 10-12 reps", sets: 3, pct: 50, note: "Peso corporal / Autocarga", video: "https://www.youtube.com/results?search_query=flexiones+tecnica" },
@@ -648,6 +812,7 @@
       ]
     };
 
+    // FASE 2
     const phase2WorkoutData = {
       LUNES: [
         { name: "Flexión con TRX", target: "3 series | 10-12 reps", sets: 3, pct: 50, note: "Inclinación regulable en TRX", video: "https://www.youtube.com/results?search_query=flexion+trx" },
@@ -675,14 +840,15 @@
       ],
       VIERNES: [
         { name: "Sentadilla con KB bilateral", target: "3 series | 10-12 reps", sets: 3, pct: 45, note: "Doble kettlebell al pecho", video: "https://www.youtube.com/results?search_query=sentadilla+kb+bilateral" },
-        { name: "Zancada frontal goblet (Forward Lunge)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Kettlebell central al pecho", video: "https://www.youtube.com/results?search_query=sentadilla+kb+bilateral" },
+        { name: "Zancada frontal goblet (Forward Lunge)", target: "3 series | 10-12 reps", sets: 3, pct: 30, note: "Kettlebell central al pecho", video: "https://www.youtube.com/results?search_query=zancada+frontal+goblet" },
         { name: "Peso muerto rumano", target: "3 series | 10-12 reps", sets: 3, pct: 60, note: "Bisagra de cadera fluida", video: "https://www.youtube.com/results?search_query=peso+muerto+rumano" },
         { name: "Monster walking (glúteo medio)", target: "3 series | 10-12 reps/lado", sets: 3, pct: 15, note: "Banda elástica en tobillos/rodillas", video: "https://www.youtube.com/results?search_query=monster+walk+gluteo+medio" },
-        { name: "Plancha abdominal (con disco)", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Tensión sustained con carga", video: "https://www.youtube.com/results?search_query=plancha+abdominal+disco" },
+        { name: "Plancha abdominal (con disco)", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Tensión sostenida con carga", video: "https://www.youtube.com/results?search_query=plancha+abdominal+disco" },
         { name: "Crunches", target: "3 series | 10-12 reps", sets: 3, pct: 10, note: "Enfoque en recto abdominal", video: "https://www.youtube.com/results?search_query=crunches+abdominales" }
       ]
     };
 
+    // FASE 4
     const phase4WorkoutData = {
       LUNES: [
         { name: "Press Banca Inclinado con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 48, note: "Control excéntrico 3 seg", video: "https://www.youtube.com/results?search_query=press+inclinado+mancuernas" },
@@ -710,13 +876,14 @@
       ],
       VIERNES: [
         { name: "Hip Thrust Explosivo con Mancuerna Pesada", target: "3 series | 12-15 reps", sets: 3, pct: 65, note: "Pausa de 2 seg arriba", video: "https://www.youtube.com/results?search_query=hip+thrust+mancuerna" },
-        { name: "Peso Muerto Piernas Rígidas con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 55, note: "Enfocado en estiramiento", video: "https://www.youtube.com/results?search_query=peso+muerto+piernas+rigidas" },
+        { name: "Peso Muerto Piernas Rígidas con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 55, note: "Enfogado en estiramiento", video: "https://www.youtube.com/results?search_query=peso+muerto+piernas+rigidas" },
         { name: "Zancada Caminando Acelerada con Mancuernas", target: "3 series | 12-15 reps/pierna", sets: 3, pct: 28, note: "Fluidez constante", video: "https://www.youtube.com/results?search_query=zancadas+caminando" },
         { name: "Abducciones de Cadera con Banda (Monster Walk)", target: "3 series | 20 pasos/lado", sets: 3, pct: 15, note: "Glúteo medio en ardor", video: "https://www.youtube.com/results?search_query=monster+walk+banda" },
         { name: "Crunches Abdominales con Disco en Pecho", target: "3 series | 15-20 reps", sets: 3, pct: 12, note: "Flexión limpia de tronco", video: "https://www.youtube.com/results?search_query=crunch+con+disco" }
       ]
     };
 
+    // MESOCICLO 3
     const defaultWorkoutData = {
       LUNES: [
         { name: "Press Banca Plano con Mancuernas", target: "3 series | 8-10 reps", sets: 3, pct: 60, note: "~30% cada mancuerna", video: "https://www.youtube.com/results?search_query=press+banca+mancuernas+tecnica" },
@@ -751,13 +918,557 @@
       ]
     };
 
+    // BASE DE DATOS DE MATERIALES POR FASES
+    const materialsDataBase = {
+      f1: {
+        title: "Materiales Requeridos - Fase 1 (Adaptación)",
+        items: [
+          {
+            name: "Barra Olímpica o Estándar con Discos",
+            desc: "Uso imprescindible en Remo Pendlay, Peso Muerto Rumano y Peso Muerto Piernas Rígidas.",
+            image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=barra+con+discos+gimnasio+casa"
+          },
+          {
+            name: "Juego de Mancuernas Ajustables",
+            desc: "Utilizadas en Press Militar, Curl de Bíceps, Tríceps tras nuca, Pájaro y Remo Unilateral.",
+            image: "https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=mancuernas+ajustables+entrenamiento"
+          },
+          {
+            name: "Kettlebells (Pesas Rusas)",
+            desc: "Imprescindibles en Zancada Goblet, Sentadilla Bilateral y Puente de Glúteo Unilateral.",
+            image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=kettlebells+pesas+rusas+ejercicios"
+          },
+          {
+            name: "Banco de Musculación Plano/Reclinable",
+            desc: "Para el Press de Banca, apoyo en Sentadilla Búlgara, Remo Unilateral y Curl Scott.",
+            image: "https://images.unsplash.com/photo-1598136490941-30d885318aba?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=banco+de+musculacion+plano+reclinable"
+          },
+          {
+            name: "Sliders o Toalla / Discos de Deslizamiento",
+            desc: "Para Curl de isquios a una pierna y simultáneo deslizando en el suelo.",
+            image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=sliders+deslizadores+fitness"
+          },
+          {
+            name: "Polea de Carga o Gomas de Resistencia",
+            desc: "Para la ejecución del Press Pallof de abdomen.",
+            image: "https://images.unsplash.com/photo-1598136490929-292a0a7890c2?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=bandas+de+resistencia+polea+gimnasio"
+          }
+        ]
+      },
+      f2: {
+        title: "Materiales Requeridos - Fase 2 (Densidad e Intensidad)",
+        items: [
+          {
+            name: "Entrenador en Suspensión (TRX)",
+            desc: "Indispensable para Flexión TRX, Remo TRXRow y Bíceps en suspensión.",
+            image: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=trx+entrenamiento+en+suspension"
+          },
+          {
+            name: "Juego de Mancuernas",
+            desc: "Para Zancadas frontales, Press militar, Pájaro y Peso muerto piernas rígidas.",
+            image: "https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=mancuernas+entrenamiento+fuerza"
+          },
+          {
+            name: "Kettlebell (Pesa Rusa)",
+            desc: "Para Sentadilla Bilateral, Zancada Goblet y Puente de Glúteo Unilateral.",
+            image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=kettlebell+entrenamiento+pierna"
+          },
+          {
+            name: "Banda Elástica Cerrada (Mini-Band)",
+            desc: "Para la activación de glúteo medio en Monster Walking.",
+            image: "https://images.unsplash.com/photo-1598136490929-292a0a7890c2?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=miniband+banda+elastica+gluteo"
+          },
+          {
+            name: "Barra y Discos Pesados",
+            desc: "Para Remo Pendlay explosivo y Peso Muerto Rumano.",
+            image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=remo+pendlay+barra"
+          },
+          {
+            name: "Banco de Entrenamiento & Slider",
+            desc: "Apoyo para Sentadilla Búlgara, Fondos de Tríceps y Curl de isquios en suelo.",
+            image: "https://images.unsplash.com/photo-1598136490941-30d885318aba?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=banco+musculacion+casa"
+          }
+        ]
+      },
+      f4: {
+        title: "Materiales Requeridos - Fase 4 (Definición Muscular)",
+        items: [
+          {
+            name: "TRX (Entrenamiento en Suspensión)",
+            desc: "Usado en Remo Invertido Supinado, Curl de Bíceps y Extensiones de Tríceps.",
+            image: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=trx+ejercicios+definicion"
+          },
+          {
+            name: "Mancuernas de Distintos Pesos",
+            desc: "Para Press Inclinado, Press Arnold, Zancadas caminadas, Hip Thrust y Curl Martillo.",
+            image: "https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=mancuernas+press+arnold"
+          },
+          {
+            name: "Bandas Elásticas Tubulares con Agarre",
+            desc: "Para Elevaciones Laterales, Woodchopper abdominal y Press Pallof Isométrico.",
+            image: "https://images.unsplash.com/photo-1598136490929-292a0a7890c2?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=bandas+elasticas+con+agarre"
+          },
+          {
+            name: "Banco Reclinable",
+            desc: "Para Press Inclinado, Pájaro en Banco y Press Francés.",
+            image: "https://images.unsplash.com/photo-1598136490941-30d885318aba?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=banco+reclinable+ejercicios"
+          },
+          {
+            name: "Banda Abductora de Glúteos (Monster Walk) & Slider",
+            desc: "Para abducciones en marcha y Curl Femoral dinámico.",
+            image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=monster+walk+banda+gluteo"
+          },
+          {
+            name: "Disco de Pesa (5-10 kg)",
+            desc: "Para Crunches abdominales sobre el pecho.",
+            image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=disco+pesa+abdominales"
+          }
+        ]
+      },
+      m3: {
+        title: "Materiales Requeridos - Mesociclo 3 (Fuerza General)",
+        items: [
+          {
+            name: "Juego Completo de Mancuernas",
+            desc: "Fundamental en Press Plano e Inclinado, Sentadilla Goblet, Peso Muerto Rumano y Zancadas.",
+            image: "https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=mancuernas+rutina+fuerza"
+          },
+          {
+            name: "TRX (Suspensión)",
+            desc: "Para Remo Invertido, Extensiones de Tríceps, Fondos y Curl Femoral Unilateral.",
+            image: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=trx+ejercicios+fuerza"
+          },
+          {
+            name: "Banco Plano / Reclinable",
+            desc: "Para apoyar espalda en Press Plano/Inclinado, Hip Thrust, Curl Inclinado y Zancadas Búlgaras.",
+            image: "https://images.unsplash.com/photo-1598136490941-30d885318aba?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=banco+plano+pesos"
+          },
+          {
+            name: "Gomas Elásticas de Resistencia",
+            desc: "Para Curl de bíceps, Press Pallof, Monster Walk y Crunches asistidos.",
+            image: "https://images.unsplash.com/photo-1598136490929-292a0a7890c2?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=gomas+elasticas+musculacion"
+          },
+          {
+            name: "Rueda Abdominal o Disco",
+            desc: "Para la estabilidad central y trabajo de abdominales/planchas.",
+            image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&q=80",
+            video: "https://www.youtube.com/results?search_query=rueda+abdominal+tecnica"
+          }
+        ]
+      }
+    };
+
+    // NUTRICIÓN POR FASES
+    const nutritionDataBase = {
+      f1: {
+        title: "Fase 1: Adaptación y Carga Proteica Equilibrada",
+        menu: {
+          "Lunes": {
+            desayuno: "Café/Té sin azúcar + Tortilla de 3 claras y 1 huevo entero + 40g Copos de Avena con agua o leche desnatada.",
+            almuerzo: "150g Pechuga de pollo a la plancha + 150g Arroz integral cocido + Ensalada variada con 1 cucharada de aceite de oliva.",
+            merienda: "1 Yogur griego natural 0% + 15g de Nueces o Almendras.",
+            cena: "200g Lomo de Merluza al horno + 200g Verduras salteadas + 1 Manzana."
+          },
+          "Martes": {
+            desayuno: "Café/Té + 60g Pan integral tostado con 50g Pechuga de pavo + 1/2 Aguacate.",
+            almuerzo: "160g Filete de Ternera magra + 200g Patata cocida + Ensalada verde.",
+            merienda: "1 Taza de queso batido 0% + 1 Plátano pequeño.",
+            cena: "1 Lata grande de Atún al natural + Ensalada mixta grande con huevo duro + 1 Pera."
+          },
+          "Miércoles": {
+            desayuno: "Café/Té + Tortilla de 3 claras y 1 huevo + 40g Avena con canela.",
+            almuerzo: "150g Pechuga de Pavo + 150g Quinoa + Brócoli al vapor.",
+            merienda: "1 Yogur natural + 10g Semillas de chía + 1 Fruta.",
+            cena: "180g Salmón a la plancha + 200g Espárragos trigueros a la plancha."
+          },
+          "Jueves": {
+            desayuno: "Café/Té + 60g Pan integral con tomate rallado + 60g Jamón de pavo.",
+            almuerzo: "160g Muslo de Pollo sin piel al horno + 150g Arroz integral + Ensalada.",
+            merienda: "1 Quesito o yogur 0% + 15g Frutos secos tostados.",
+            cena: "200g Bacalao o Merluza a la plancha + Puré de verduras ligero."
+          },
+          "Viernes": {
+            desayuno: "Café/Té + 3 Claras y 1 huevo revueltos + 40g Copos de Avena.",
+            almuerzo: "150g Solomillo de Cerdo magro + 200g Boniato al horno + Ensalada.",
+            merienda: "120g Pechuga de pavo + 1 Torta de arroz.",
+            cena: "Ensalada grande de Canónigos, Tomate, 1/2 Aguacate, 120g Atún al natural y 2 Huevos cocidos."
+          },
+          "Sábado": {
+            desayuno: "Café/Té + Pancake casero (40g avena + 3 claras de huevo).",
+            almuerzo: "160g Hamburguesa de pollo o ternera magra casera + 150g Arroz integral + Verduras.",
+            merienda: "1 Yogur proteico + 1 Fruta.",
+            cena: "200g Sepia o Calamar a la plancha con ajo y perejil + Ensalada verde."
+          },
+          "Domingo": {
+            desayuno: "Café/Té + 60g Pan integral tostado + Tortilla de 2 huevos.",
+            almuerzo: "Comida libre controlada o Paella magra de pollo y verduras.",
+            merienda: "Infusión + 1 Puñado de almendras.",
+            cena: "200g Pescado blanco + crema de calabacín + 1 Manzana."
+          }
+        },
+        grocery: {
+          "Verdulería & Frutería": [
+            "Lechuga, Canónigos y Pepinos para ensaladas",
+            "Tomates, Calabacines, Pimientos y Espárragos trigueros",
+            "Brócoli y Calabaza/Puerro para cremas",
+            "Manzanas, Peras, Plátanos y Frutas de temporada",
+            "Boniato y Patatas"
+          ],
+          "Carnicería & Pescadería": [
+            "Pechuga de Pollo (1 kg) y Pechuga de Pavo (500g)",
+            "Filetes de Ternera magra y Solomillo de Cerdo magro",
+            "Hamburguesas caseras de pollo o ternera magra",
+            "Lomos de Merluza / Bacalao fresco o congelado (1 kg)",
+            "Lomos de Salmón fresco (300g)",
+            "Sepia / Calamares frescos (200g)"
+          ],
+          "Lácteos & Huevos": [
+            "Huevos frescos (2-3 docenas)",
+            "Yogures griegos 0% o Queso fresco batido 0%",
+            "Leche desnatada o bebida vegetal sin azúcar"
+          ],
+          "Despensa & Cereales": [
+            "Copos de Avena integrales",
+            "Arroz integral y Quinoa",
+            "Pan 100% integral de grano entero",
+            "Latas de Atún al natural",
+            "Nueces y Almendras al natural sin sal",
+            "Aceite de Oliva Virgen Extra (AOVE) y Canela"
+          ]
+        }
+      },
+      f2: {
+        title: "Fase 2: Densidad Proteica e Incremento Metabólico",
+        menu: {
+          "Lunes": {
+            desayuno: "Café/Té + Tortilla de 4 claras y 1 huevo + 30g Avena con agua o leche.",
+            almuerzo: "180g Pechuga de pollo + 120g Arroz integral + Ensalada verde.",
+            merienda: "200g Queso fresco batido 0% + 15g Nueces.",
+            cena: "200g Merluza a la plancha + 200g Salteado de verduras verdes."
+          },
+          "Martes": {
+            desayuno: "Café/Té + 50g Pan integral con 60g Pechuga de pavo + 1/2 Aguacate.",
+            almuerzo: "180g Filete de Ternera magra + 150g Patata asada + Ensalada.",
+            merienda: "1 Yogur proteico + 1 Manzana.",
+            cena: "150g Atún al natural + Ensalada grande con huevo duro y tomates."
+          },
+          "Miércoles": {
+            desayuno: "Café/Té + 4 Claras revueltas con espinacas + 30g Avena.",
+            almuerzo: "180g Pechuga de Pavo + 120g Quinoa + Brócoli al vapor.",
+            merienda: "1 Taza de queso batido 0% + canela.",
+            cena: "200g Dorada o Lubina a la plancha + Verduras a la parrilla."
+          },
+          "Jueves": {
+            desayuno: "Café/Té + 50g Pan integral + 2 Huevos escalfados.",
+            almuerzo: "180g Solomillo de Cerdo magro + 120g Arroz integral + Ensalada.",
+            merienda: "120g Fiambre de Pavo + 10g Almendras.",
+            cena: "200g Bacalao a la plancha + Crema de calabacín casera."
+          },
+          "Viernes": {
+            desayuno: "Café/Té + Tortilla de 4 claras y 1 huevo + 30g Avena.",
+            almuerzo: "180g Pechuga de pollo + 150g Boniato al horno + Ensalada.",
+            merienda: "1 Yogur 0% + Frutos secos.",
+            cena: "Ensalada grande de canónigos, 150g Atún al natural y 2 Huevos cocidos."
+          },
+          "Sábado": {
+            desayuno: "Café/Té + Pancake proteico (4 claras + 30g avena).",
+            almuerzo: "180g Hamburguesa magra de ternera + 100g Arroz integral + Pimientos.",
+            merienda: "1 Batido proteico o yogur 0% + 1 Fruta.",
+            cena: "200g Sepia a la plancha con ajo y perejil + Ensalada verde."
+          },
+          "Domingo": {
+            desayuno: "Café/Té + 50g Pan integral + Tortilla francesa de 2 huevos.",
+            almuerzo: "Comida libre controlada / Guiso magro de carne con verduras.",
+            merienda: "Infusión + 15g Frutos secos.",
+            cena: "200g Pescado blanco al vapor + Puré de verduras."
+          }
+        },
+        grocery: {
+          "Verdulería & Frutería": [
+            "Espinacas frescas, Canónigos y Lechugas",
+            "Pimientos, Cebollas, Calabacín y Judías verdes",
+            "Tomates cherry y Pepinos",
+            "Manzanas, Peras y Limones",
+            "Boniato y Patatas"
+          ],
+          "Carnicería & Pescadería": [
+            "Pechuga de Pollo y Pavo (1.2 kg)",
+            "Filetes de Ternera magra y Solomillo de Cerdo",
+            "Hamburguesas magras de ternera caseras",
+            "Lomos de Merluza y Bacalao (1.2 kg)",
+            "Dorada o Lubina limpia",
+            "Sepia fresca"
+          ],
+          "Lácteos & Huevos": [
+            "Huevos (3 docenas)",
+            "Queso fresco batido 0% y Yogures proteicos 0%"
+          ],
+          "Despensa & Cereales": [
+            "Copos de Avena integrales",
+            "Arroz integral y Quinoa",
+            "Pan 100% integral",
+            "Latas de Atún al natural",
+            "Nueces y Almendras sin sal",
+            "Aceite de Oliva Virgen Extra"
+          ]
+        }
+      },
+      f4: {
+        title: "Fase 4: Definición Muscular y Pérdida de Grasa (Déficit Controlado)",
+        menu: {
+          "Lunes": {
+            desayuno: "Café/Té + Tortilla de 4 claras y 1 yema + 25g Pan integral o 20g Avena.",
+            almuerzo: "180g Pechuga de Pollo + 100g Arroz integral + Ensalada de lechuga y pepino.",
+            merienda: "150g Queso fresco batido 0% + 10g Almendras.",
+            cena: "220g Merluza a la plancha + 250g Espárragos y calabacín a la plancha."
+          },
+          "Martes": {
+            desayuno: "Café/Té + 40g Pan integral con 60g Pechuga de pavo + 1/4 Aguacate.",
+            almuerzo: "180g Filete de Ternera magra + 120g Patata cocida + Ensalada.",
+            merienda: "1 Yogur proteico 0% + 1 Manzana verde.",
+            cena: "150g Atún al natural + Ensalada de pepino, canónigos y 2 claras cocidas."
+          },
+          "Miércoles": {
+            desayuno: "Café/Té + 4 Claras revueltas con espinacas + 20g Avena.",
+            almuerzo: "180g Pechuga de Pavo + 100g Quinoa + Brócoli al vapor.",
+            merienda: "150g Queso batido 0% con canela.",
+            cena: "220g Lenguado o Bacalao al vapor + Crema de calabacín (sin patata)."
+          },
+          "Jueves": {
+            desayuno: "Café/Té + 40g Pan integral con 1 Huevo entero y 2 claras.",
+            almuerzo: "180g Solomillo de Pollo + 100g Arroz integral + Ensalada verde.",
+            merienda: "100g Pavo frío + 1/2 Manzana.",
+            cena: "200g Calamares o Sepia a la plancha + Ensalada mixta."
+          },
+          "Viernes": {
+            desayuno: "Café/Té + Tortilla de 4 claras + 20g Avena.",
+            almuerzo: "180g Pechuga de Pollo + 120g Boniato asado + Ensalada.",
+            merienda: "1 Yogur proteico 0%.",
+            cena: "Ensalada grande con 130g Atún, 3 Claras cocidas y 1 cda AOVE."
+          },
+          "Sábado": {
+            desayuno: "Café/Té + Pancake proteico de 4 claras + 20g Avena.",
+            almuerzo: "180g Hamburguesa de pollo magra + 80g Arroz integral + Pimientos.",
+            merienda: "1 Batido de proteína o yogur 0%.",
+            cena: "220g Pescado blanco a la plancha + Verduras verdes al vapor."
+          },
+          "Domingo": {
+            desayuno: "Café/Té + 40g Pan integral + Tortilla de 3 claras y 1 yema.",
+            almuerzo: "180g Pechuga de pavo + 100g Patata cocida + Ensalada verde.",
+            merienda: "Infusión + 10g Almendras.",
+            cena: "200g Pescado blanco al horno con verduras variadas."
+          }
+        },
+        grocery: {
+          "Verdulería & Frutería": [
+            "Espinacas, Canónigos, Pepinos y Lechuga variada",
+            "Espárragos trigueros, Calabacín y Pimientos",
+            "Brócoli y Tomates frescos",
+            "Manzanas verdes y Limones",
+            "Patatas y Boniatos"
+          ],
+          "Carnicería & Pescadería": [
+            "Pechuga de Pollo y Solomillo de Pavo magro (1.5 kg)",
+            "Filetes de Ternera magra",
+            "Hamburguesas de pollo supermagras",
+            "Lomos de Merluza, Lenguado y Bacalao (1.5 kg)",
+            "Sepia o Calamares (250g)"
+          ],
+          "Lácteos & Huevos": [
+            "Huevos (4 docenas, énfasis en claras)",
+            "Queso fresco batido 0% y Yogures proteicos 0%"
+          ],
+          "Despensa & Cereales": [
+            "Copos de Avena fina",
+            "Arroz integral y Quinoa",
+            "Pan 100% integral de centeno",
+            "Latas de Atún al natural",
+            "Almendras al natural",
+            "Vinagre de Manzana y Aceite de Oliva"
+          ]
+        }
+      },
+      m3: {
+        title: "Mesociclo 3: Fuerza y Mantenimiento de Masa Magra",
+        menu: {
+          "Lunes": {
+            desayuno: "Café/Té + Tortilla de 3 claras y 1 huevo entero + 50g Avena con leche desnatada.",
+            almuerzo: "160g Pechuga de Pollo + 160g Arroz integral + Ensalada variada.",
+            merienda: "200g Queso batido 0% + 20g Nueces + 1 Plátano.",
+            cena: "200g Pescado blanco a la plancha + 200g Patata cocida + Ensalada."
+          },
+          "Martes": {
+            desayuno: "Café/Té + 60g Pan integral con 60g Pechuga de pavo + 1/2 Aguacate.",
+            almuerzo: "170g Filete de Ternera magra + 200g Patata asada + Salteado de verduras.",
+            merienda: "1 Yogur proteico + 1 Manzana.",
+            cena: "140g Atún al natural + Ensalada completa con 1 Huevo duro, maíz y tomate."
+          },
+          "Miércoles": {
+            desayuno: "Café/Té + Tortilla de 3 claras y 1 huevo + 50g Avena.",
+            almuerzo: "160g Pechuga de Pavo + 160g Quinoa o Arroz + Brócoli con aceite de oliva.",
+            merienda: "200g Queso batido 0% + frutos secos.",
+            cena: "180g Salmón a la plancha + Espárragos trigueros a la plancha."
+          },
+          "Jueves": {
+            desayuno: "Café/Té + 60g Pan integral + 2 Huevos enteros revueltos.",
+            almuerzo: "170g Lomo de Cerdo magro + 160g Arroz integral + Ensalada.",
+            merienda: "120g Pavo frío + 1 Torta de arroz + frutos secos.",
+            cena: "200g Merluza o Bacalao + Crema de verduras casera."
+          },
+          "Viernes": {
+            desayuno: "Café/Té + 3 Claras y 1 huevo entero + 50g Avena.",
+            almuerzo: "160g Pechuga de Pollo + 200g Boniato al horno + Ensalada.",
+            merienda: "1 Yogur 0% + 1 Fruta.",
+            cena: "Ensalada grande con 140g Atún, 2 Huevos cocidos, canónigos y tomate."
+          },
+          "Sábado": {
+            desayuno: "Café/Té + Pancake proteico (50g avena + 3 claras + 1 huevo).",
+            almuerzo: "170g Hamburguesa magra + 150g Arroz integral + Verduras.",
+            merienda: "1 Batido proteico o yogur 0% + 1 Fruta.",
+            cena: "200g Sepia a la plancha con ajo y perejil + Ensalada mixta."
+          },
+          "Domingo": {
+            desayuno: "Café/Té + 60g Pan integral + Tortilla francesa de 2 huevos.",
+            almuerzo: "Comida libre controlada / Comida familiar magra.",
+            merienda: "Infusión + Puñado de almendras.",
+            cena: "200g Filete de pescado blanco + crema de verduras."
+          }
+        },
+        grocery: {
+          "Verdulería & Frutería": [
+            "Lechuga, Canónigos y Tomates variados",
+            "Espárragos, Calabacines y Brócoli",
+            "Manzanas, Plátanos y Fruta variada",
+            "Patatas y Boniatos"
+          ],
+          "Carnicería & Pescadería": [
+            "Pechuga de Pollo y Pavo (1.2 kg)",
+            "Filetes de Ternera magra y Lomo de Cerdo magro",
+            "Lomos de Pescado blanco (Merluza/Bacalao)",
+            "Salmón fresco (200g)",
+            "Sepia o Calamar"
+          ],
+          "Lácteos & Huevos": [
+            "Huevos frescos (3 docenas)",
+            "Queso fresco batido 0% y Yogures proteicos",
+            "Leche desnatada o bebida vegetal"
+          ],
+          "Despensa & Cereales": [
+            "Copos de Avena integrales",
+            "Arroz integral y Quinoa",
+            "Pan 100% integral",
+            "Latas de Atún al natural",
+            "Nueces y Almendras sin sal",
+            "Aceite de Oliva Virgen Extra"
+          ]
+        }
+      }
+    };
+
+    // RECETAS
+    const recipesData = [
+      {
+        title: "Pancakes Proteicos de Avena y Claras",
+        category: "Desayuno / Merienda",
+        ingredients: "40g Copos de Avena, 3-4 Claras de huevo, 1/2 cucharadita de canela en polvo, chorrito de agua o leche desnatada.",
+        steps: [
+          "Coloca en la batidora la avena, las claras de huevo y la canela.",
+          "Tritura todo bien durante 30 segundos hasta obtener una mezcla homogénea.",
+          "Pincela una sartén antiadherente con unas gotas de AOVE y calienta a fuego medio.",
+          "Vierte la mezcla formando discos y cocina 2 minutos por lado hasta que salgan burbujas y doren."
+        ],
+        video: "https://www.youtube.com/results?search_query=tortitas+proteicas+avena+y+claras+receta"
+      },
+      {
+        title: "Pechuga de Pollo Salteada con Arroz Integral",
+        category: "Almuerzo / Comida",
+        ingredients: "160g Pechuga de pollo cortada en dados, 150g Arroz integral cocido, 1/2 pimiento verde/rojo, 1 cda AOVE, especias al gusto.",
+        steps: [
+          "Sazona los dados de pollo con ajo en polvo, orégano y una pizca de sal.",
+          "En una sartén con AOVE, saltea el pimiento picado durante 4 minutos.",
+          "Añade el pollo y saltea a fuego vivo hasta dorar por fuera.",
+          "Incorpora el arroz integral cocido y remueve durante 2 minutos."
+        ],
+        video: "https://www.youtube.com/results?search_query=salteado+pollo+con+arroz+integral+saludable"
+      },
+      {
+        title: "Merluza al Horno con Verduras y Limón",
+        category: "Cena",
+        ingredients: "200g Lomo de merluza, 1/2 calabacín, 1/2 pimiento, 5 espárragos, 1 cda AOVE, zumo de limón.",
+        steps: [
+          "Precalienta el horno a 180ºC y haz una cama con las verduras cortadas en la bandeja.",
+          "Coloca la merluza encima, añade el AOVE y riega con zumo de limón.",
+          "Hornea durante 15-18 minutos hasta que el pescado esté hecho."
+        ],
+        video: "https://www.youtube.com/results?search_query=merluza+al+horno+con+verduras+facil+y+sano"
+      },
+      {
+        title: "Salmón a la Plancha con Espárragos Trigueros",
+        category: "Cena / Comida",
+        ingredients: "180g Salmón fresco, 1 manojo de espárragos, sal escamada, pimienta negra, limón.",
+        steps: [
+          "Lava y retira el tallo duro de los espárragos.",
+          "Cocina el salmón en la plancha caliente empezando por el lado de la piel (4 min).",
+          "Coloca los espárragos al lado en la plancha.",
+          "Da la vuelta al salmón, cocina 2 minutos más y sirve con limón."
+        ],
+        video: "https://www.youtube.com/results?search_query=salmon+a+la+plancha+con+esparragos"
+      },
+      {
+        title: "Sepia a la Plancha con Ajo y Perejil",
+        category: "Cena",
+        ingredients: "200g Sepia limpia, 2 dientes de ajo, perejil picado, 1 cda AOVE, limón.",
+        steps: [
+          "Haz unos cortes superficiales en rejilla a la sepia.",
+          "Marca en plancha muy fuerte durante 2 minutos por lado.",
+          "Añade el majado de ajo, perejil y AOVE al final y saltea 1 minuto."
+        ],
+        video: "https://www.youtube.com/results?search_query=sepia+a+la+plancha+con+ajo+y+perejil+tierna"
+      },
+      {
+        title: "Crema Ligera de Calabacín (Sin Nata)",
+        category: "Cena / Acompañamiento",
+        ingredients: "2 Calabacines, 1 puerro, 1/2 cebolla, 2 quesitos 0% grasa, sal y pimienta.",
+        steps: [
+          "Trocea las verduras y cuécelas en agua con sal durante 15-20 minutos.",
+          "Retira parte del caldo, añade los quesitos 0% y tritura bien con batidora."
+        ],
+        video: "https://www.youtube.com/results?search_query=crema+de+calabacin+saludable+sin+nata"
+      }
+    ];
+
     let currentSelection = localStorage.getItem('active_training_selection') || '1';
     let currentDay = "LUNES";
     let bodyWeight = parseFloat(localStorage.getItem('app_user_weight')) || 76;
+    let currentNutSubTab = "menu";
 
     document.getElementById('user-weight').value = bodyWeight;
     document.getElementById('current-week-select').value = currentSelection;
-    document.getElementById('m-date').valueAsDate = new Date();
+    
+    const todayStr = new Date().toISOString().split('T')[0];
+    document.getElementById('m-date').value = todayStr;
 
     let uploadedPhotos = { front: '', side: '', back: '' };
     let chartInstances = {};
@@ -770,6 +1481,20 @@
       if (currentSelection.startsWith('f2')) return phase2WorkoutData;
       if (currentSelection.startsWith('f4')) return phase4WorkoutData;
       return JSON.parse(localStorage.getItem('m3_custom_workout_data')) || defaultWorkoutData;
+    }
+
+    function getActiveNutritionData() {
+      if (currentSelection.startsWith('f1')) return nutritionDataBase.f1;
+      if (currentSelection.startsWith('f2')) return nutritionDataBase.f2;
+      if (currentSelection.startsWith('f4')) return nutritionDataBase.f4;
+      return nutritionDataBase.m3;
+    }
+
+    function getActiveMaterialsData() {
+      if (currentSelection.startsWith('f1')) return materialsDataBase.f1;
+      if (currentSelection.startsWith('f2')) return materialsDataBase.f2;
+      if (currentSelection.startsWith('f4')) return materialsDataBase.f4;
+      return materialsDataBase.m3;
     }
 
     function updateDisplayLabels() {
@@ -786,6 +1511,12 @@
       const currentData = getActiveWorkoutData();
       if (currentData[currentDay]) renderExercises();
       loadHistory();
+      if (document.getElementById('nutrition-view').style.display === 'block') {
+        renderNutritionView();
+      }
+      if (document.getElementById('materials-view').style.display === 'block') {
+        renderMaterialsView();
+      }
     }
 
     function updateBodyWeight(val) {
@@ -816,15 +1547,31 @@
 
       const workoutView = document.getElementById('workout-view');
       const metricsView = document.getElementById('metrics-view');
+      const materialsView = document.getElementById('materials-view');
+      const nutritionView = document.getElementById('nutrition-view');
+      const recipesView = document.getElementById('recipes-view');
       const progressView = document.getElementById('progress-view');
 
       workoutView.style.display = 'none';
       metricsView.style.display = 'none';
+      materialsView.style.display = 'none';
+      nutritionView.style.display = 'none';
+      recipesView.style.display = 'none';
       progressView.style.display = 'none';
 
       if (day === 'MIERCOLES') {
         metricsView.style.display = 'block';
-        document.getElementById('m-weight').value = bodyWeight;
+        const dateInput = document.getElementById('m-date').value || todayStr;
+        onDateChange(dateInput);
+      } else if (day === 'MATERIALES') {
+        materialsView.style.display = 'block';
+        renderMaterialsView();
+      } else if (day === 'NUTRICION') {
+        nutritionView.style.display = 'block';
+        renderNutritionView();
+      } else if (day === 'RECETAS') {
+        recipesView.style.display = 'block';
+        renderRecipesView();
       } else if (day === 'PROGRESO') {
         progressView.style.display = 'block';
         renderProgressTable();
@@ -977,7 +1724,149 @@
       }
     }
 
-    // GESTIÓN DEL PERFIL DE USUARIO Y REFERENCIA INICIAL
+    function onDateChange(selectedDate) {
+      const history = JSON.parse(localStorage.getItem('global_metrics_history') || '[]');
+      const match = history.find(h => h.date === selectedDate);
+
+      if (match) {
+        document.getElementById('m-weight').value = match.weight || '';
+        document.getElementById('m-fat').value = match.fat || '';
+        document.getElementById('m-cintura').value = match.cintura || '';
+        document.getElementById('m-abdomen').value = match.abdomen || '';
+        document.getElementById('m-cadera').value = match.cadera || '';
+        document.getElementById('m-pecho').value = match.pecho || '';
+        document.getElementById('m-brazo').value = match.brazo || '';
+        document.getElementById('m-pierna').value = match.pierna || '';
+        document.getElementById('m-gemelo').value = match.gemelo || '';
+
+        uploadedPhotos = match.photos ? { ...match.photos } : { front: '', side: '', back: '' };
+
+        showPhotoPreview('img-front-prev', uploadedPhotos.front);
+        showPhotoPreview('img-side-prev', uploadedPhotos.side);
+        showPhotoPreview('img-back-prev', uploadedPhotos.back);
+      } else {
+        document.getElementById('m-weight').value = bodyWeight;
+        document.getElementById('m-fat').value = '';
+        document.getElementById('m-cintura').value = '';
+        document.getElementById('m-abdomen').value = '';
+        document.getElementById('m-cadera').value = '';
+        document.getElementById('m-pecho').value = '';
+        document.getElementById('m-brazo').value = '';
+        document.getElementById('m-pierna').value = '';
+        document.getElementById('m-gemelo').value = '';
+
+        uploadedPhotos = { front: '', side: '', back: '' };
+        showPhotoPreview('img-front-prev', '');
+        showPhotoPreview('img-side-prev', '');
+        showPhotoPreview('img-back-prev', '');
+      }
+    }
+
+    function showPhotoPreview(imgId, src) {
+      const imgElem = document.getElementById(imgId);
+      if (src) {
+        imgElem.src = src;
+        imgElem.style.display = 'block';
+      } else {
+        imgElem.src = '';
+        imgElem.style.display = 'none';
+      }
+    }
+
+    // RENDERIZADO DE MATERIALES
+    function renderMaterialsView() {
+      const data = getActiveMaterialsData();
+      document.getElementById('materials-phase-title').innerText = data.title;
+
+      const container = document.getElementById('materials-list-container');
+      let html = '';
+
+      data.items.forEach(m => {
+        html += `
+          <div class="material-item">
+            <img class="material-img" src="${m.image}" alt="${m.name}" loading="lazy">
+            <div class="material-name">${m.name}</div>
+            <div class="material-desc">${m.desc}</div>
+            <a href="${m.video}" target="_blank" rel="noopener" class="video-link" style="margin-top:auto;">▶ Ver Uso en Vídeo</a>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // RENDERIZADO DE NUTRICIÓN
+    function toggleNutritionSubTab(subTab) {
+      currentNutSubTab = subTab;
+      document.getElementById('btn-nut-menu').classList.toggle('active', subTab === 'menu');
+      document.getElementById('btn-nut-grocery').classList.toggle('active', subTab === 'grocery');
+
+      document.getElementById('nut-menu-content').style.display = subTab === 'menu' ? 'block' : 'none';
+      document.getElementById('nut-grocery-content').style.display = subTab === 'grocery' ? 'block' : 'none';
+    }
+
+    function renderNutritionView() {
+      const data = getActiveNutritionData();
+      document.getElementById('nutrition-phase-title').innerText = data.title;
+
+      const menuContainer = document.getElementById('nut-menu-content');
+      let menuHtml = '';
+      for (const [day, meals] of Object.entries(data.menu)) {
+        menuHtml += `
+          <div class="menu-day-title">📅 ${day}</div>
+          <div class="meal-box"><div class="meal-name">🥣 Desayuno</div>${meals.desayuno}</div>
+          <div class="meal-box"><div class="meal-name">🍗 Almuerzo / Comida</div>${meals.almuerzo}</div>
+          <div class="meal-box"><div class="meal-name">🍏 Merienda</div>${meals.merienda}</div>
+          <div class="meal-box"><div class="meal-name">🐟 Cena</div>${meals.cena}</div>
+        `;
+      }
+      menuContainer.innerHTML = menuHtml;
+
+      const groceryContainer = document.getElementById('nut-grocery-content');
+      let groceryHtml = '';
+      for (const [cat, items] of Object.entries(data.grocery)) {
+        groceryHtml += `<div class="grocery-category">🛒 ${cat}</div><ul class="grocery-list">`;
+        items.forEach(item => {
+          groceryHtml += `<li>${item}</li>`;
+        });
+        groceryHtml += `</ul>`;
+      }
+      groceryContainer.innerHTML = groceryHtml;
+    }
+
+    // RENDERIZADO DE RECETAS
+    function renderRecipesView() {
+      const container = document.getElementById('recipes-list-container');
+      let html = '';
+
+      recipesData.forEach(r => {
+        let stepsHtml = '';
+        r.steps.forEach(step => {
+          stepsHtml += `<li>${step}</li>`;
+        });
+
+        html += `
+          <div class="recipe-card">
+            <div class="exercise-header">
+              <div class="recipe-title">${r.title}</div>
+              <a href="${r.video}" target="_blank" rel="noopener" class="video-link">▶ Vídeo Tutorial</a>
+            </div>
+            <div style="margin-bottom: 6px;"><span class="recipe-tag">${r.category}</span></div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
+              <strong>🛒 Ingredientes:</strong> ${r.ingredients}
+            </div>
+            <div class="recipe-steps">
+              <strong>🍳 Pasos de elaboración:</strong>
+              <ol>${stepsHtml}</ol>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // GESTIÓN DEL PERFIL DE USUARIO Y SALUDO PERSONALIZADO
     function saveUserProfile() {
       const profile = {
         name: document.getElementById('p-name').value || '',
@@ -991,7 +1880,9 @@
       localStorage.setItem('app_user_profile', JSON.stringify(profile));
       if (profile.startWeight > 0) updateBodyWeight(profile.startWeight);
 
-      alert('¡Perfil de usuario y referencia inicial guardados correctamente!');
+      updateWelcomeTitle(profile.name);
+
+      alert('¡Perfil de usuario y saludo de bienvenida guardados correctamente!');
       renderProgressTable();
       renderIndividualCharts();
     }
@@ -1004,9 +1895,21 @@
       if (profile.startDate) document.getElementById('p-start-date').value = profile.startDate;
       if (profile.startWeight) document.getElementById('p-start-weight').value = profile.startWeight;
       if (profile.startFat) document.getElementById('p-start-fat').value = profile.startFat;
+
+      updateWelcomeTitle(profile.name);
     }
 
-    // GESTIÓN Y ALMACENAMIENTO DE MÉTRICAS (ORDENADAS Y PERSISTENTES POR FECHA)
+    function updateWelcomeTitle(fullName) {
+      const titleElem = document.getElementById('welcome-title');
+      if (fullName && fullName.trim() !== '') {
+        const firstName = fullName.trim().split(' ')[0];
+        titleElem.innerText = `Bienvenido ${firstName}, Tareas de esta semana`;
+      } else {
+        titleElem.innerText = `Bienvenido, Tareas de esta semana`;
+      }
+    }
+
+    // GESTIÓN Y ALMACENAMIENTO DE MÉTRICAS
     function saveMetrics() {
       const dateVal = document.getElementById('m-date').value || new Date().toISOString().split('T')[0];
 
@@ -1028,16 +1931,14 @@
 
       let history = JSON.parse(localStorage.getItem('global_metrics_history') || '[]');
       
-      // Elimina la entrada antigua si se está reescribiendo la misma fecha
       history = history.filter(h => h.date !== dateVal);
       history.push(entry);
 
-      // Ordenar por fecha cronológica (de la más antigua a la más reciente)
       history.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       localStorage.setItem('global_metrics_history', JSON.stringify(history));
 
-      alert(`¡Métricas y fotos del ${dateVal} guardadas correctamente!`);
+      alert(`¡Métricas del ${dateVal} guardadas correctamente!`);
       switchDay('PROGRESO');
     }
 
@@ -1051,7 +1952,6 @@
         return;
       }
 
-      // Toma la primera referencia del Perfil o el primer registro
       const baseWeight = profile.startWeight || history[0].weight;
       const baseFat = profile.startFat || history[0].fat;
 
@@ -1199,6 +2099,7 @@
       if (confirm('¿Quieres eliminar todo el historial de métricas, perfil y fotos?')) {
         localStorage.removeItem('global_metrics_history');
         localStorage.removeItem('app_user_profile');
+        loadUserProfile();
         renderProgressTable();
         renderIndividualCharts();
         renderProgressPhotos();
