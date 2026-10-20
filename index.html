@@ -390,6 +390,12 @@
             <option value="f2_s3">Fase 2 - Semana 3</option>
             <option value="f2_s4">Fase 2 - Semana 4</option>
           </optgroup>
+          <optgroup label="Fase 4 (Definición Muscular & Pérdida de Grasa)">
+            <option value="f4_s1">Fase 4 - Semana 1</option>
+            <option value="f4_s2">Fase 4 - Semana 2</option>
+            <option value="f4_s3">Fase 4 - Semana 3</option>
+            <option value="f4_s4">Fase 4 - Semana 4</option>
+          </optgroup>
           <optgroup label="Mesociclo 3">
             <option value="1">Mesociclo 3 - Semana 1</option>
             <option value="2">Mesociclo 3 - Semana 2</option>
@@ -479,6 +485,10 @@
           <label>Pierna Dominante (cm):</label>
           <input type="number" step="0.5" id="m-pierna" placeholder="cm">
         </div>
+        <div class="metric-row">
+          <label>Gemelo Dominante (cm):</label>
+          <input type="number" step="0.5" id="m-gemelo" placeholder="cm">
+        </div>
 
         <!-- MÓDULO DE FOTOS -->
         <div class="photo-upload-box">
@@ -532,6 +542,7 @@
     const weekPctMultipliers = { 1: 1.0, 2: 1.03, 3: 1.06, 4: 1.10, 5: 1.13, 6: 0.90 };
     const f1Multipliers = { 'f1_s1': 1.0, 'f1_s2': 1.03, 'f1_s3': 1.06, 'f1_s4': 1.10 };
     const f2Multipliers = { 'f2_s1': 1.0, 'f2_s2': 1.03, 'f2_s3': 1.06, 'f2_s4': 1.10 };
+    const f4Multipliers = { 'f4_s1': 1.0, 'f4_s2': 1.025, 'f4_s3': 1.05, 'f4_s4': 1.08 };
 
     // FASE 1
     const phase1WorkoutData = {
@@ -602,6 +613,41 @@
       ]
     };
 
+    // FASE 4 (Definición Muscular & Pérdida de Grasa)
+    const phase4WorkoutData = {
+      LUNES: [
+        { name: "Press Banca Inclinado con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 48, note: "Control excéntrico 3 seg", video: "https://www.youtube.com/results?search_query=press+inclinado+mancuernas" },
+        { name: "Remo Invertido en TRX (Supinado)", target: "3 series | 12-15 reps", sets: 3, pct: 65, note: "Máxima contracción dorsal", video: "https://www.youtube.com/results?search_query=remo+trx+supinado" },
+        { name: "Press Arnold de Pie con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 35, note: "Rotación fluida de hombro", video: "https://www.youtube.com/results?search_query=press+arnold+mancuernas" },
+        { name: "Super serie: Curl Bíceps + Extensiones Tríceps en TRX", target: "3 series | 12-15 reps", sets: 3, pct: 30, note: "Sin descanso entre ambos", video: "https://www.youtube.com/results?search_query=curl+y+triceps+trx" },
+        { name: "Elevaciones Laterales con Goma Elástica", target: "3 series | 15-20 reps", sets: 3, pct: 15, note: "Tensión constante en bombeo", video: "https://www.youtube.com/results?search_query=elevaciones+laterales+goma" },
+        { name: "Plancha Dinámica con Escaladores (Mountain Climbers)", target: "3 series | 45 seg", sets: 3, pct: 10, note: "Ritmo fluido constante", video: "https://www.youtube.com/results?search_query=mountain+climbers+tecnica" }
+      ],
+      MARTES: [
+        { name: "Sentadilla Goblet Profunda con Mancuerna", target: "3 series | 12-15 reps", sets: 3, pct: 38, note: "Ritmo rápido de subida", video: "https://www.youtube.com/results?search_query=sentadilla+goblet+profunda" },
+        { name: "Peso Muerto Rumano Unilateral con Mancuerna", target: "3 series | 12-15 reps/pierna", sets: 3, pct: 28, note: "Gran demanda de estabilidad", video: "https://www.youtube.com/results?search_query=peso+muerto+rumano+unilateral" },
+        { name: "Zancadas Búlgaras con Salto / Dinámicas", target: "3 series | 10-12 reps/pierna", sets: 3, pct: 20, note: "Potencia y gasto metabólico", video: "https://www.youtube.com/results?search_query=zancadas+bulgaras+dinamicas" },
+        { name: "Curl Femoral con Goma / Slider", target: "3 series | 15 reps", sets: 3, pct: 25, note: "Aislamiento de isquios", video: "https://www.youtube.com/results?search_query=curl+femoral+slider" },
+        { name: "Elevación de Gemelos de Pie con Mancuerna", target: "3 series | 15-20 reps/pierna", sets: 3, pct: 20, note: "Pausa de 2 seg en cúspide", video: "https://www.youtube.com/results?search_query=elevacion+gemelos+mancuerna" },
+        { name: "Woodchopper Abdominal con Goma Elástica", target: "3 series | 15 reps/lado", sets: 3, pct: 15, note: "Trabajo oblicuo explosivo", video: "https://www.youtube.com/results?search_query=woodchopper+con+goma" }
+      ],
+      JUEVES: [
+        { name: "Flexiones con Parada abajo (Pause Push-ups)", target: "3 series | 12-15 reps", sets: 3, pct: 50, note: "1 seg de pausa abajo", video: "https://www.youtube.com/results?search_query=flexiones+con+pausa" },
+        { name: "Remo Unilateral con Mancuerna (Ritmo 3-1-1)", target: "3 series | 12-15 reps", sets: 3, pct: 32, note: "3 seg de bajada controlada", video: "https://www.youtube.com/results?search_query=remo+unilateral+mancuerna" },
+        { name: "Pájaro en Banco Inclinado con Mancuernas", target: "3 series | 15 reps", sets: 3, pct: 15, note: "Hombro posterior bien aislado", video: "https://www.youtube.com/results?search_query=pajaro+banco+inclinado" },
+        { name: "Curl Hammer (Martillo) con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 22, note: "Braquial y antebrazo", video: "https://www.youtube.com/results?search_query=curl+martillo+mancuernas" },
+        { name: "Press Francés con Mancuernas en Banco", target: "3 series | 12-15 reps", sets: 3, pct: 22, note: "Control de codos cerrados", video: "https://www.youtube.com/results?search_query=press+frances+mancuernas" },
+        { name: "Press Pallof Isométrico", target: "3 series | 30 seg/lado", sets: 3, pct: 15, note: "Tensión máxima central", video: "https://www.youtube.com/results?search_query=press+pallof+isometrico" }
+      ],
+      VIERNES: [
+        { name: "Hip Thrust Explosivo con Mancuerna Pesada", target: "3 series | 12-15 reps", sets: 3, pct: 65, note: "Pausa de 2 seg arriba", video: "https://www.youtube.com/results?search_query=hip+thrust+mancuerna" },
+        { name: "Peso Muerto Piernas Rígidas con Mancuernas", target: "3 series | 12-15 reps", sets: 3, pct: 55, note: "Enfocado en estiramiento", video: "https://www.youtube.com/results?search_query=peso+muerto+piernas+rigidas" },
+        { name: "Zancada Caminando Acelerada con Mancuernas", target: "3 series | 12-15 reps/pierna", sets: 3, pct: 28, note: "Fluidez constante", video: "https://www.youtube.com/results?search_query=zancadas+caminando" },
+        { name: "Abducciones de Cadera con Banda (Monster Walk)", target: "3 series | 20 pasos/lado", sets: 3, pct: 15, note: "Glúteo medio en ardor", video: "https://www.youtube.com/results?search_query=monster+walk+banda" },
+        { name: "Crunches Abdominales con Disco en Pecho", target: "3 series | 15-20 reps", sets: 3, pct: 12, note: "Flexión limpia de tronco", video: "https://www.youtube.com/results?search_query=crunch+con+disco" }
+      ]
+    };
+
     // MESOCICLO 3
     const defaultWorkoutData = {
       LUNES: [
@@ -656,6 +702,9 @@
       if (currentSelection.startsWith('f2')) {
         return phase2WorkoutData;
       }
+      if (currentSelection.startsWith('f4')) {
+        return phase4WorkoutData;
+      }
       return JSON.parse(localStorage.getItem('m3_custom_workout_data')) || defaultWorkoutData;
     }
 
@@ -688,6 +737,8 @@
         phase1WorkoutData[currentDay][exIdx].pct = pct;
       } else if (currentSelection.startsWith('f2')) {
         phase2WorkoutData[currentDay][exIdx].pct = pct;
+      } else if (currentSelection.startsWith('f4')) {
+        phase4WorkoutData[currentDay][exIdx].pct = pct;
       } else {
         let workoutData = JSON.parse(localStorage.getItem('m3_custom_workout_data')) || defaultWorkoutData;
         workoutData[currentDay][exIdx].pct = pct;
@@ -733,6 +784,8 @@
         mult = f1Multipliers[currentSelection] || 1.0;
       } else if (currentSelection.startsWith('f2')) {
         mult = f2Multipliers[currentSelection] || 1.0;
+      } else if (currentSelection.startsWith('f4')) {
+        mult = f4Multipliers[currentSelection] || 1.0;
       } else {
         mult = weekPctMultipliers[parseInt(currentSelection)] || 1.0;
       }
@@ -783,7 +836,7 @@
           <div class="calc-weight-tag">
             📊 Carga: 
             <input type="number" step="1" value="${currentPct}" onchange="updateExercisePct(${exIdx}, this.value)">%
-            de ${bodyWeight}kg ≈ <strong>${calcTotalKg} kg</strong> ${noteLabel}
+            de ${bodyWeight}kg ≈ <strong>${calcTotalKg} kg</strong>${noteLabel}
           </div>
           ${rowsHtml}
         `;
@@ -797,212 +850,4 @@
 
     function saveWorkout() {
       const now = new Date();
-      const timeStr = `${now.toLocaleDateString()} a las ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-      localStorage.setItem(`last_saved_${currentSelection}_${currentDay}`, timeStr);
-      alert(`¡Sesión del ${currentDay} guardada correctamente!`);
-      loadHistory();
-    }
-
-    function resetCurrentDay() {
-      if (confirm(`¿Quieres borrar los registros del ${currentDay}?`)) {
-        const currentData = getActiveWorkoutData();
-        currentData[currentDay].forEach((ex, exIdx) => {
-          for (let s = 1; s <= ex.sets; s++) {
-            const keyBase = `store_${currentSelection}_${currentDay}_ex${exIdx}_s${s}`;
-            localStorage.removeItem(`${keyBase}_kg`);
-            localStorage.removeItem(`${keyBase}_reps`);
-            localStorage.removeItem(`${keyBase}_done`);
-          }
-        });
-        renderExercises();
-      }
-    }
-
-    function loadHistory() {
-      const historyContainer = document.getElementById('history-content');
-      const lastSaved = localStorage.getItem(`last_saved_${currentSelection}_${currentDay}`);
-
-      if (!lastSaved) {
-        historyContainer.innerHTML = `<em>No hay registros guardados para el ${currentDay} en esta selección.</em>`;
-        return;
-      }
-
-      let html = `<div style="margin-bottom: 8px;"><strong>Último guardado:</strong> ${lastSaved}</div>`;
-
-      const currentData = getActiveWorkoutData();
-      if (!currentData[currentDay]) return;
-
-      currentData[currentDay].forEach((ex, exIdx) => {
-        let setSummary = [];
-        for (let s = 1; s <= ex.sets; s++) {
-          const keyBase = `store_${currentSelection}_${currentDay}_ex${exIdx}_s${s}`;
-          const kg = localStorage.getItem(`${keyBase}_kg`);
-          const reps = localStorage.getItem(`${keyBase}_reps`);
-          if (kg || reps) {
-            setSummary.push(`S${s}: ${kg || 0}kg x ${reps || 0}reps`);
-          }
-        }
-        if (setSummary.length > 0) {
-          html += `<div class="history-item"><strong>${ex.name}:</strong> ${setSummary.join(' | ')}</div>`;
-        }
-      });
-
-      historyContainer.innerHTML = html;
-    }
-
-    // PREVISUALIZACIÓN DE FOTOS
-    function previewPhoto(input, targetImgId) {
-      const file = input.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const imgElem = document.getElementById(targetImgId);
-          imgElem.src = e.target.result;
-          imgElem.style.display = 'block';
-
-          if (targetImgId === 'img-front-prev') uploadedPhotos.front = e.target.result;
-          if (targetImgId === 'img-side-prev') uploadedPhotos.side = e.target.result;
-          if (targetImgId === 'img-back-prev') uploadedPhotos.back = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    // GESTIÓN DE MÉTRICAS Y FOTOS
-    function saveMetrics() {
-      const entry = {
-        selection: currentSelection,
-        date: document.getElementById('m-date').value || new Date().toISOString().split('T')[0],
-        weight: parseFloat(document.getElementById('m-weight').value) || 0,
-        fat: parseFloat(document.getElementById('m-fat').value) || 0,
-        cintura: parseFloat(document.getElementById('m-cintura').value) || 0,
-        abdomen: parseFloat(document.getElementById('m-abdomen').value) || 0,
-        cadera: parseFloat(document.getElementById('m-cadera').value) || 0,
-        pecho: parseFloat(document.getElementById('m-pecho').value) || 0,
-        brazo: parseFloat(document.getElementById('m-brazo').value) || 0,
-        pierna: parseFloat(document.getElementById('m-pierna').value) || 0,
-        photos: { ...uploadedPhotos }
-      };
-
-      if (entry.weight > 0) {
-        updateBodyWeight(entry.weight);
-      }
-
-      let history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
-      history.push(entry);
-
-      localStorage.setItem(`metrics_history_${currentSelection}`, JSON.stringify(history));
-
-      alert(`¡Métricas y fotos guardadas con éxito!`);
-      switchDay('PROGRESO');
-    }
-
-    function renderProgressTable() {
-      const container = document.getElementById('progress-table-container');
-      const history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
-
-      if (history.length === 0) {
-        container.innerHTML = '<p style="font-size:0.85rem; color: var(--text-muted);">No hay registros de métricas aún. Ve a la pestaña de MIÉRCOLES para guardar tus medidas y fotos.</p>';
-        return;
-      }
-
-      const initial = history[0];
-
-      let tableHtml = `
-        <div style="overflow-x:auto;">
-          <table>
-            <thead>
-              <tr>
-                <th>Registro</th>
-                <th>Fecha</th>
-                <th>Peso</th>
-                <th>% Grasa</th>
-                <th>Cintura</th>
-                <th>Abdomen</th>
-                <th>Cadera</th>
-                <th>Pecho</th>
-                <th>Brazo</th>
-                <th>Pierna</th>
-              </tr>
-            </thead>
-            <tbody>
-      `;
-
-      history.forEach((h, idx) => {
-        tableHtml += `
-          <tr>
-            <td><strong>#${idx + 1}</strong></td>
-            <td>${h.date}</td>
-            <td>${h.weight}k ${getDiffBadge(h.weight, initial.weight, idx)}</td>
-            <td>${h.fat ? h.fat + '%' : '-'} ${getDiffBadge(h.fat, initial.fat, idx)}</td>
-            <td>${h.cintura}cm ${getDiffBadge(h.cintura, initial.cintura, idx)}</td>
-            <td>${h.abdomen}cm ${getDiffBadge(h.abdomen, initial.abdomen, idx)}</td>
-            <td>${h.cadera}cm ${getDiffBadge(h.cadera, initial.cadera, idx)}</td>
-            <td>${h.pecho}cm ${getDiffBadge(h.pecho, initial.pecho, idx)}</td>
-            <td>${h.brazo}cm ${getDiffBadge(h.brazo, initial.brazo, idx)}</td>
-            <td>${h.pierna}cm ${getDiffBadge(h.pierna, initial.pierna, idx)}</td>
-          </tr>
-        `;
-      });
-
-      tableHtml += `
-            </tbody>
-          </table>
-        </div>
-      `;
-
-      container.innerHTML = tableHtml;
-    }
-
-    function renderProgressPhotos() {
-      const container = document.getElementById('progress-photos-container');
-      const history = JSON.parse(localStorage.getItem(`metrics_history_${currentSelection}`) || '[]');
-
-      let html = '';
-      history.forEach((h, idx) => {
-        if (h.photos && (h.photos.front || h.photos.side || h.photos.back)) {
-          html += `
-            <div class="progress-photos-card">
-              <div style="font-weight:bold; font-size:0.85rem; color:var(--highlight); margin-bottom:8px;">
-                📅 Registro #${idx + 1} — ${h.date} (${h.weight} kg${h.fat ? ' | ' + h.fat + '% Grasa' : ''})
-              </div>
-              <div class="photo-preview-grid">
-                ${h.photos.front ? `<img src="${h.photos.front}" alt="Frente">` : ''}
-                ${h.photos.side ? `<img src="${h.photos.side}" alt="Perfil">` : ''}
-                ${h.photos.back ? `<img src="${h.photos.back}" alt="Espalda">` : ''}
-              </div>
-            </div>
-          `;
-        }
-      });
-
-      if (html === '') {
-        container.innerHTML = '<p style="font-size:0.85rem; color: var(--text-muted);">Aún no has adjuntado fotos en tus registros.</p>';
-      } else {
-        container.innerHTML = html;
-      }
-    }
-
-    function getDiffBadge(current, first, idx) {
-      if (idx === 0 || !first || !current) return '';
-      const diff = Math.round((current - first) * 10) / 10;
-      if (diff === 0) return '';
-      const cls = diff < 0 ? 'diff-down' : 'diff-up';
-      const sign = diff > 0 ? '+' : '';
-      return `<span class="diff-badge ${cls}">${sign}${diff}</span>`;
-    }
-
-    function clearAllMetrics() {
-      if (confirm('¿Quieres eliminar todo el historial de métricas y fotos de esta selección?')) {
-        localStorage.removeItem(`metrics_history_${currentSelection}`);
-        renderProgressTable();
-        renderProgressPhotos();
-      }
-    }
-
-    // Inicialización
-    renderExercises();
-    loadHistory();
-  </script>
-</body>
-</html>
+      const timeStr = `${now.toLocaleDateString()} a las${now.toLocaleTimeString([], {hour: '2-digit', minute:'
